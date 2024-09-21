@@ -1,5 +1,6 @@
 class MoviesController < ApplicationController
   def index
-    @movies = [ "Iron Man", "Superman", "Spider-Man", "Batman" ]
+    # Connect to the database and get all the movies
+    @movies = Movie.all
   end
 end
