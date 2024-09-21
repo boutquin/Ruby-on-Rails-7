@@ -4,16 +4,16 @@
 <%# Iterating over each movie in the @movies instance variable %>
 <% @movies.each do |movie| %>
   <li>
-    <%# Display the movie title, rating, and total gross %>
+    <%# Display the movie title, rating, and year released %>
     <strong><%= movie.title %></strong> (<%= movie.rating %>):
-    <%= number_to_currency(movie.total_gross, precision: 0) %>
+    <%= year_of(movie) %>
   </li>
-  <%# Display the movie description and release date %>
+  <%# Display the movie description and total gross %>
   <p>
-    <%= movie.description %>
+    <%= truncate(movie.description, length: 40, separator: ' ') %>
   </p>
   <p>
-    <%= movie.released_on %>
+    <%= total_gross(movie) %>
   </p>
 <% end %>
 </ul>
