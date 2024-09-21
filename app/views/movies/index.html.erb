@@ -1,6 +1,12 @@
 <h1>Movies</h1>
+
 <ul>
+# Iterating over each movie in the @movies instance variable
 <% @movies.each do |movie| %>
-  <li><%= movie %></li>
+  <li>
+    # Display the movie title, rating, and total gross
+    <strong><%= movie.title %></strong> (<%= movie.rating %>):
+    <%= movie.total_gross %>
+  </li>
 <% end %>
 </ul>
