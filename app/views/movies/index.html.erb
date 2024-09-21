@@ -6,7 +6,7 @@
   <li>
     # Display the movie title, rating, and total gross
     <strong><%= movie.title %></strong> (<%= movie.rating %>):
-    <%= movie.total_gross %>
+    <%= number_to_currency(movie.total_gross, precision: 0) %>
   </li>
 <% end %>
 </ul>
