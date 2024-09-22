@@ -12,9 +12,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "movies#index"
 
-  # Defines the route for the movies index ("/movies")
-  get "movies" => "movies#index", as: :movies
-
-  # Define the route to show a single movie ("/movies/:id")
-  get "movies/:id" => "movies#show", as: :movie
+  # Defines the routes for the movies controller
+  resources :movies
 end
