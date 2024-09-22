@@ -1,7 +1,7 @@
 class MoviesController < ApplicationController
   def index
-    # Connect to the database and get all the movies
-    @movies = Movie.all
+    # Connect to the database and get all the released movies
+    @movies = Movie.released
   end
 
   def show
