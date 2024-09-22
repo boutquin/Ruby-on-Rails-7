@@ -9,26 +9,25 @@
 
     <%= yield :head %>
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
+    <%# Displays the logo at the top of the page %>
     <header>
-      <h1>Flix</h1>
+      <%= image_tag("logo.png") %>
     </header>
+    <%# Displays the main content of the page %>
     <div class="content">
       <%= yield %>
     </div>
-      <footer>
-    <p>
-      Copyright &copy; <%= Time.now.year %>
-      <%= link_to "Pierre G. Boutquin", "https://github.com/boutquin/Ruby-on-Rails-7" %>
-    </p>
-  </footer>
+    <%# Displays the footer at the bottom of the page %>
+    <footer>
+      <p>
+        Copyright &copy; <%= Time.now.year %>
+        <%= link_to "Pierre G. Boutquin", "https://github.com/boutquin/Ruby-on-Rails-7" %>
+      </p>
+    </footer>
   </body>
 </html>
