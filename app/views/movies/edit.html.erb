@@ -1,29 +1,4 @@
 <h1>Editing <%= @movie.title %></h1>
 
-<%= form_with(model: @movie, local: true) do |form| %>
-  <div>
-    <%= form.label(:title) %>
-    <%= form.text_field(:title) %>
-  </div>
-  <div>
-    <%= form.label(:description) %>
-    <%= form.text_area(:description) %>
-  </div>
-  <div>
-    <%= form.label(:rating) %>
-    <%= form.text_field(:rating) %>
-  </div>
-  <div>
-    <%= form.label(:released_on) %>
-    <%# form.date_select(:released_on), {},  {class: "date"} %>
-    <%# Use the date_field form helper to create a date input field. %>
-    <%= form.date_field :released_on %>
-  </div>
-  <div>
-    <%= form.label(:total_gross) %>
-    <%= form.text_field(:total_gross) %>
-  </div>
-  <div>
-    <%= form.submit("Update Movie") %>
-  </div>
-  <% end %>
+<%# Use the partial _form.html.rfrb to render the form %>
+<%= render "form", movie: @movie %>
