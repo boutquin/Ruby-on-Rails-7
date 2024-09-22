@@ -20,10 +20,8 @@ class MoviesController < ApplicationController
 
     # If the movie is saved to the database, redirect to the movie's show page
     if @movie.save
-      # Flash the creation notice message
-      flash[:notice] = "Movie created successfully."
-      # Redirect to the movie's show page
-      redirect_to @movie
+      # Redirect to the movie's show page and flash the notice message
+      redirect_to @movie, notice: "Movie created successfully."
     else
       # If the movie is not saved to the database, render the new form again
       # and set the status code to 422 (unprocessable entity)
@@ -42,10 +40,8 @@ class MoviesController < ApplicationController
 
     # Update the movie with the given parameters
     if @movie.update(movie_params)
-      # Flash the update notice message
-      flash[:notice] = "Movie updated successfully."
-      # Redirect to the movie's show page
-      redirect_to @movie
+      # Redirect to the movie's show page and flash the notice message
+      redirect_to @movie, notice: "Movie updated successfully."
     else
       # If the movie is not updated to the database, render the edit form again
       # and set the status code to 422 (unprocessable entity)
