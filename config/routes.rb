@@ -14,4 +14,7 @@ Rails.application.routes.draw do
 
   # Defines the route for the movies index ("/movies")
   get "movies" => "movies#index", as: :movies
+
+  # Define the route to show a single movie ("/movies/:id")
+  get "movies/:id" => "movies#show", as: :movie
 end
