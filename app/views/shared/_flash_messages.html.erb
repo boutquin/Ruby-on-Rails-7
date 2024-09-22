@@ -1,0 +1,24 @@
+<%# This partial displays the flash messages. %>
+<%# The flash messages are used to display notifications, alerts, and errors. %>
+<%# These flash messages are stored in the flash hash. %>
+
+<%# Display the flash notification messages if there are any. %>
+<% if flash[:notice] %>
+    <div class="flash notice">
+        <%= flash[:notice] %>
+    </div>
+<% end %>
+
+<%# Display the flash alert messages if there are any. %>
+<% if flash[:alert] %>
+    <div class="flash alert">
+        <%= flash[:alert] %>
+    </div>
+<% end %>
+
+<%# Display the flash error messages if there are any. %>
+<% if flash[:error] %>
+    <div class="flash error">
+        <%= flash[:error] %>
+    </div>
+<% end %>
