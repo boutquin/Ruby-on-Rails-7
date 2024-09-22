@@ -5,7 +5,7 @@
       <%# List the movie title, total gross, and a truncated description %>
       <h2>
         <%# Title of the movie with a link to the movie's details page %>
-        <%= link_to movie.title, movie %>
+        <%= link_to movie.title, movie %> (<%= movie.released_on.strftime "%Y-%m-%d" %>)
       </h2>
       <h3>
         <%= total_gross(movie) %>
