@@ -1,0 +1,31 @@
+<%# This partial form is used to render the form for both the new and edit actions. %>
+<%= form_with(model: movie, local: true) do |form| %>
+  <div>
+    <%= form.label :title %>
+      <%= form.text_field :title, autofocus: true %>
+  </div>
+  <div>
+    <%= form.label :description %>
+    <%= form.text_area :description, rows: 10 %>
+  </div>
+  <div>
+    <%= form.label :rating %>
+    <%= form.text_field :rating %>
+  </div>
+  <div>
+    <%= form.label :released_on %>
+    <%= form.date_select :released_on, {}, {class: "date"} %>
+    <%# Alternately, one can also use the date_field form helper to create a date input field. %>
+    <%# form.date_field :released_on %>
+  </div>
+  <div>
+    <%= form.label :total_gross %>
+    <%= form.text_field :total_gross %>
+  </div>
+  <div>
+    <%# The form builder is responsible for generating the submit button with a proper caption. %>
+    <%# For a new record, the caption is "Create Movie". %>
+    <%# For an existing record, the caption is "Update Movie". %>
+    <%= form.submit %>
+  </div>
+  <% end %>
