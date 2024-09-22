@@ -4,7 +4,8 @@
     <div class="summary">
       <%# List the movie title, total gross, and a truncated description %>
       <h2>
-        <%= movie.title %>
+        <%# Title of the movie with a link to the movie's details page %>
+        <%= link_to movie.title, movie %>
       </h2>
       <h3>
         <%= total_gross(movie) %>
