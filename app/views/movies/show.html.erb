@@ -17,7 +17,10 @@
   </div>
 </section>
 
-<%# Button to edit a movie %>
+<%# Buttons to edit and delete a movie %>
 <section class="admin">
   <%= link_to "Edit", edit_movie_path(@movie), class: "button" %>
+  <%# Delete button with a confirmation dialog %>
+  <%= link_to "Delete", movie_path(@movie), class: "button",
+         data: { turbo_method: :delete, turbo_confirm: "Deletion cannot be undone. Are you sure?" } %>
 </section>
