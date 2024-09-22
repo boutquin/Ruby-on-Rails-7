@@ -1,6 +1,6 @@
 # Ruby-On-Rails-7
 
-![build status](https://github.com/boutquin/Ruby-On-Rails-7/actions/workflows/WCI.yml/badge.svg)
+![Build Status](https://github.com/boutquin/Ruby-On-Rails-7/actions/workflows/CI.yml/badge.svg)
 ![License](https://img.shields.io/github/license/boutquin/Ruby-On-Rails-7?style=for-the-badge)
 
 Course work for Ruby on Rails 7 by Pragmatic Studio
