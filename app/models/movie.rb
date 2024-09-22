@@ -16,9 +16,10 @@ class Movie < ApplicationRecord
   # These ratings are stored in the RATINGS constant
   validates :rating, inclusion: { in: RATINGS }
 
-  # Validates the numericality of total_gross
-  validates_numericality_of :total_gross, greater_than_or_equal_to: 0, if: :released?
-  validates_numericality_of :total_gross, equal_to: 0, unless: :released?
+  # Validates the numericality of total_gross for released movies
+  validates_numericality_of :total_gross, greater_than_or_equal_to: 0, if: :released?, message: "must be greater than or equal to 0 for released movies"
+  # Validates the numericality of total_gross for non-released movies
+  validates_numericality_of :total_gross, equal_to: 0, unless: :released?, message: "must be 0 for unreleased movies"
 
   # Validates the format of image_file_name
   # The format must be JPG or PNG and the filename must not be blank or contain spaces
