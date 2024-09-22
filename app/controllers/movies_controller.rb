@@ -20,7 +20,9 @@ class MoviesController < ApplicationController
 
     # If the movie is saved to the database, redirect to the movie's show page
     if @movie.save
+      # Flash the creation notice message
       flash[:notice] = "Movie created successfully."
+      # Redirect to the movie's show page
       redirect_to @movie
     else
       # If the movie is not saved to the database, render the new form again
@@ -39,7 +41,12 @@ class MoviesController < ApplicationController
 
     # Update the movie with the given parameters
     if @movie.update(movie_params)
+      # Flash the update notice message
       flash[:notice] = "Movie updated successfully."
+      # Redirect to the movie's show page
+      redirect_to @movie
+      flash[:notice] = "Movie updated successfully."
+      # Redirect to the movie's show page
       redirect_to @movie
     else
       render :edit
@@ -53,9 +60,10 @@ class MoviesController < ApplicationController
     # Delete the movie from the database
     @movie.destroy
 
-    # Redirect to the list of movies
+    # Flash the deletion notice message
     flash[:notice] = "Movie deleted successfully."
-    redirect_to movies_url
+    # Redirect to the movies index page with a 303 status code
+    redirect_to movies_url, status: :see_other
   end
 
   # Private methods are only accessible within the class
