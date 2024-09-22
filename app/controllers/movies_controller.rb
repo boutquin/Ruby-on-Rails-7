@@ -74,6 +74,7 @@ class MoviesController < ApplicationController
     # Permit the specified parameters to be used when creating or updating a movie
     # This ensures that only safe data is saved to the database
     params.require(:movie).
-      permit(:title, :description, :rating, :released_on, :total_gross)
+      permit(:title, :description, :rating, :released_on, :total_gross,
+            :director, :duration, :image_file_name)
   end
 end
