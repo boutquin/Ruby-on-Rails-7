@@ -10,7 +10,8 @@
   </div>
   <div>
     <%= form.label :rating %>
-    <%= form.text_field :rating %>
+    <%# Uses a selector to allow the user to pick a rating. %>
+    <%= form.select :rating, Movie::RATINGS, prompt: "Pick one" %>
   </div>
   <div>
     <%= form.label :released_on %>

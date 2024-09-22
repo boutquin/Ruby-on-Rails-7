@@ -45,9 +45,6 @@ class MoviesController < ApplicationController
       flash[:notice] = "Movie updated successfully."
       # Redirect to the movie's show page
       redirect_to @movie
-      flash[:notice] = "Movie updated successfully."
-      # Redirect to the movie's show page
-      redirect_to @movie
     else
       render :edit
     end
