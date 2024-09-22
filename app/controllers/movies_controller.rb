@@ -26,7 +26,8 @@ class MoviesController < ApplicationController
       redirect_to @movie
     else
       # If the movie is not saved to the database, render the new form again
-      render :new
+      # and set the status code to 422 (unprocessable entity)
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -46,7 +47,9 @@ class MoviesController < ApplicationController
       # Redirect to the movie's show page
       redirect_to @movie
     else
-      render :edit
+      # If the movie is not updated to the database, render the edit form again
+      # and set the status code to 422 (unprocessable entity)
+      render :edit, status: :unprocessable_entity
     end
   end
 

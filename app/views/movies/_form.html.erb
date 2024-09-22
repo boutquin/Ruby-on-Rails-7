@@ -1,5 +1,10 @@
 <%# This partial form is used to render the form for both the new and edit actions. %>
+<%# The form builder is used to generate the form fields. %>
 <%= form_with(model: movie, local: true) do |form| %>
+  <%# Display an error message if there are any errors for the movie object. %>
+  <%= render "shared/errors", object: movie %>
+
+  <%# Display the form fields for the movie object. %>
   <div>
     <%= form.label :title %>
       <%= form.text_field :title, autofocus: true %>
