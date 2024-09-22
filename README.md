@@ -1,6 +1,6 @@
 # Ruby-On-Rails-7
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/Boutquin/Ruby-On-Rails-7/CI.yml)](https://github.com/Boutquin/Ruby-On-Rails-7/actions/workflows/CI.yml)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Boutquin/Ruby-On-Rails-7/CI.yml?branch=main)](https://github.com/Boutquin/Ruby-On-Rails-7/actions/workflows/CI.yml)
 ![License](https://img.shields.io/github/license/boutquin/Ruby-On-Rails-7?style=for-the-badge)
 
 Course work for Ruby on Rails 7 by Pragmatic Studio
