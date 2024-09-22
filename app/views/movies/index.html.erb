@@ -1,18 +1,17 @@
-<h2>Movies</h2>
-<ul>
-<%# Iterating over each movie in the @movies instance variable %>
+<%# Iterating over the movies collection and displaying each movie %>
 <% @movies.each do |movie| %>
-  <li>
-    <%# Display the movie title, rating, and year released %>
-    <strong><%= movie.title %></strong> (<%= movie.rating %>):
-    <%= year_of(movie) %>
-  </li>
-  <%# Display the movie description and total gross %>
-  <p>
-    <%= truncate(movie.description, length: 40, separator: ' ') %>
-  </p>
-  <p>
-    <%= total_gross(movie) %>
-  </p>
+  <section class="movie">
+    <div class="summary">
+      <%# List the movie title, total gross, and a truncated description %>
+      <h2>
+        <%= movie.title %>
+      </h2>
+      <h3>
+        <%= total_gross(movie) %>
+      </h3>
+      <p>
+        <%= truncate(movie.description, length: 150, separator: ' ') %>
+      </p>
+    </div>
+  </section>
 <% end %>
-</ul>
