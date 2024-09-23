@@ -1,0 +1,67 @@
+<!--
+  This is the 'new' view template for creating a new review for a movie.
+  It is located at 'app/views/reviews/new.html.erb' or 'app/views/movies/reviews/new.html.erb' depending on your routing.
+  The view displays a heading indicating that the user is creating a new review for a specific movie
+  and renders a form to input the review's details.
+  The form is bound to the @review object, which is associated with @movie.
+-->
+
+<!--
+  Display the page header with the movie title.
+  - '@movie' is an instance variable containing the movie object for which the review is being created.
+  - '@movie.title' retrieves the title of the movie.
+  - 'link_to' creates a hyperlink to the movie's show page, allowing users to navigate back to the movie details.
+  - The '<h1>' tag represents a level 1 heading, indicating the main focus of the page.
+-->
+<h1>New Review for <%= link_to @movie.title, @movie %></h1>
+
+<!--
+  Render the form for creating the new review.
+  - 'form_with' helper is used to generate the form elements.
+  - 'model: [@movie, @review]' binds the form to the @review object nested under @movie.
+    - This ensures that the form's action URL corresponds to the nested route for creating a review under a movie.
+  - The block variable 'form' is used to generate form fields.
+-->
+<%= form_with(model: [@movie, @review]) do |form| %>
+  <!--
+    Render the shared errors partial if there are any validation errors on the @review object.
+    - The 'render' method includes the '_errors.html.erb' partial from 'app/views/shared/'.
+    - 'object: @review' passes the @review object to the partial for displaying error messages.
+  -->
+  <%= render "shared/errors", object: @review %>
+
+  <!--
+    Label and text field for the 'name' attribute.
+    - 'form.label :name' generates a <label> element associated with the 'name' input.
+    - 'form.text_field :name' generates an <input type="text"> for the reviewer's name.
+    - 'autofocus: true' sets the focus to this field when the form loads.
+  -->
+  <%= form.label :name %>
+  <%= form.text_field :name, autofocus: true %>
+
+  <!--
+    Label and select field for the 'stars' attribute.
+    - 'form.label :stars' generates a <label> element for the 'stars' input.
+    - 'form.select :stars, Review::STARS' generates a <select> element with options.
+      - 'Review::STARS' is an array or constant defining the possible star ratings (e.g., [1, 2, 3, 4, 5]).
+    - 'prompt: "Pick one"' adds a placeholder option prompting the user to select a rating.
+  -->
+  <%= form.label :stars %>
+  <%= form.select :stars, Review::STARS, prompt: "Pick one" %>
+
+  <!--
+    Label and text area for the 'comment' attribute.
+    - 'form.label :comment' generates a <label> element for the 'comment' input.
+    - 'form.text_area :comment' generates a <textarea> element for the review comment.
+    - 'placeholder: "What did you think?"' adds placeholder text to guide the user.
+  -->
+  <%= form.label :comment %>
+  <%= form.text_area :comment, placeholder: "What did you think?" %>
+
+  <!--
+    Submit button for the form.
+    - 'form.submit "Post Review"' generates a <input type="submit"> button with the label "Post Review".
+    - This submits the form data to create the new review.
+  -->
+  <%= form.submit "Post Review" %>
+<% end %>

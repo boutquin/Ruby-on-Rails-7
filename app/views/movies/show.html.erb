@@ -3,7 +3,7 @@
   It is located at 'app/views/movies/show.html.erb'.
   The view presents detailed information about the movie, including its image, title,
   release year, rating, reviews, description, and additional attributes.
-  It also provides administrative options to edit or delete the movie.
+  It also provides options for users to write a review and administrative options to edit or delete the movie.
 -->
 
 <section class="movie-details">
@@ -11,14 +11,13 @@
     Display the movie's image.
     - The 'image_tag' helper generates an HTML <img> tag for the given image file.
     - '@movie.image_file_name' provides the filename of the movie's image.
-    - This assumes that the image file exists in the assets/images directory.
+    - This assumes that the image file exists in the 'app/assets/images' directory.
     - If the image file does not exist, a broken image icon may appear unless handled appropriately.
   -->
   <div class="image">
     <%= image_tag @movie.image_file_name %>
   </div>
 
-  <!-- Display details for a single movie -->
   <div class="details">
     <!--
       Display the movie title as a heading.
@@ -70,7 +69,7 @@
         <td><%= @movie.director %></td>
       </tr>
       <tr>
-        <th>Duration (in mins):</th>
+        <th>Duration:</th>
         <td><%= @movie.duration %></td>
       </tr>
       <tr>
@@ -83,29 +82,34 @@
         <td><%= total_gross(@movie) %></td>
       </tr>
     </table>
+
+    <!--
+      Link to write a new review for the movie.
+      - 'link_to "Write Review", new_movie_review_path(@movie)' creates a hyperlink to the new review form for the movie.
+      - 'class: "review"' applies a CSS class for styling the link.
+      - This encourages users to contribute by writing their own reviews.
+    -->
+    <%= link_to "Write Review", new_movie_review_path(@movie), class: "review" %>
   </div>
 </section>
 
-<!-- Buttons to edit and delete a movie -->
+<!--
+  Administrative options to edit or delete the movie.
+  - These links are typically shown to users with the appropriate permissions (e.g., admins).
+-->
 <section class="admin">
   <!--
     Link to edit the movie.
-    - 'link_to' creates a hyperlink styled as a button.
-    - 'Edit' is the link text displayed to the user.
-    - 'edit_movie_path(@movie)' generates the URL to the edit page for the movie.
-    - 'class: "button"' applies a CSS class for styling, allowing the link to look like a button.
+    - 'link_to "Edit", edit_movie_path(@movie), class: "button"' creates a link styled as a button to the edit page for the movie.
   -->
   <%= link_to "Edit", edit_movie_path(@movie), class: "button" %>
 
   <!--
     Link to delete the movie with a confirmation dialog.
-    - 'Delete' is the link text displayed to the user.
-    - 'movie_path(@movie)' generates the URL for the movie's show page, which is also used for the delete action.
-    - 'data: { turbo_method: :delete }' specifies that the link should send a DELETE HTTP request instead of GET.
-    - 'data: { turbo_confirm: "Deletion cannot be undone. Are you sure?" }' prompts the user for confirmation before proceeding.
-    - 'class: "button"' applies a CSS class for styling.
-    - This requires that the application includes the necessary JavaScript (Turbo or UJS) to handle 'data-turbo-method' attributes.
-    - The confirmation dialog helps prevent accidental deletions by asking the user to confirm their action.
+    - 'link_to "Delete", movie_path(@movie), ...' creates a link that sends a DELETE HTTP request.
+    - 'data: { turbo_method: :delete }' specifies that the link should use the DELETE method.
+    - 'data: { turbo_confirm: "Deletion cannot be undone. Are you sure?" }' prompts the user to confirm the action.
+    - This requires Turbo or Rails UJS to handle the method and confirmation data attributes.
   -->
   <%= link_to "Delete", movie_path(@movie), class: "button",
          data: { turbo_method: :delete, turbo_confirm: "Deletion cannot be undone. Are you sure?" } %>
