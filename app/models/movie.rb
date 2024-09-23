@@ -191,6 +191,20 @@ class Movie < ApplicationRecord
     released_on <= Time.now
   end
 
+  # Calculates the average star rating from all reviews associated with this movie.
+  # Returns the average as a float, or 0.0 if there are no reviews.
+  #
+  # Example Usage:
+  #   movie.average_stars  # => 4.2
+  #
+  # Explanation:
+  # - 'reviews' is the association that links the movie to its reviews.
+  # - 'average(:stars)' is an ActiveRecord method that calculates the average value of the 'stars' attribute.
+  # - If there are no reviews, 'average(:stars)' returns nil, so we use '|| 0.0' to return 0.0 instead.
+  def average_stars
+    reviews.average(:stars) || 0.0
+  end
+
   # ============================================================================
   # Class Methods
   # ============================================================================
