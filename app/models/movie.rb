@@ -1,4 +1,13 @@
+# The Movie class represents a film in the application.
+# It inherits from ApplicationRecord, which provides it with all the functionalities of Active Record models.
+# Active Record facilitates the mapping between the Movie objects and the database records.
+# This class includes validations, associations, and methods related to movies.
+
 class Movie < ApplicationRecord
+  # ============================================================================
+  # Constants
+  # ============================================================================
+
   # Define a constant array of valid movie ratings according to the Motion Picture Association of America (MPAA) guidelines.
   # These ratings are used to validate that the 'rating' attribute contains an acceptable value.
   # Valid ratings include:
@@ -8,6 +17,45 @@ class Movie < ApplicationRecord
   # - "R": Restricted
   # - "NC-17": Adults Only
   RATINGS = %w[G PG PG-13 R NC-17]
+
+  # ============================================================================
+  # Associations
+  # ============================================================================
+
+  # Establish a one-to-many association between the Movie and Review models.
+  # This indicates that a single Movie can have many associated Reviews.
+  # The 'has_many' method sets up this relationship and provides additional methods to interact with the associated reviews.
+  #
+  # Options:
+  # - 'dependent: :destroy':
+  #   - Ensures that when a Movie record is deleted, all of its associated Review records are also deleted.
+  #   - This maintains referential integrity in the database by preventing orphaned reviews that reference non-existent movies.
+  #   - It triggers the 'destroy' method on each associated Review, allowing any callbacks or validations to run.
+  #
+  # Methods Added by 'has_many :reviews':
+  # - 'reviews': Returns a collection of Review objects associated with the Movie.
+  # - 'reviews<<': Adds one or more reviews to the collection.
+  # - 'reviews.delete': Removes one or more reviews from the collection.
+  # - 'reviews.destroy': Removes one or more reviews from the collection and deletes them from the database.
+  # - 'reviews.build(attributes = {})': Builds a new Review associated with the Movie (unsaved).
+  # - 'reviews.create(attributes = {})': Creates and saves a new Review associated with the Movie.
+  #
+  # Example Usage:
+  # - Accessing Reviews:
+  #   - movie = Movie.find(1)
+  #   - reviews = movie.reviews
+  #
+  # - Creating a New Review:
+  #   - review = movie.reviews.create(content: "Great movie!", rating: 5)
+  #
+  # - Deleting a Movie and Its Reviews:
+  #   - movie.destroy
+  #   - This will delete the movie and all associated reviews from the database.
+  has_many :reviews, dependent: :destroy
+
+  # ============================================================================
+  # Validations
+  # ============================================================================
 
   # Ensure that essential attributes are present before saving the movie record.
   # This validation prevents saving movies without critical information.
@@ -34,6 +82,42 @@ class Movie < ApplicationRecord
   # - The pattern repeats to match the full date format.
   validates_format_of :released_on, with: /\A\d{4}-\d{2}-\d{2}\z/
 
+  # Validate that the 'duration' attribute is a positive integer representing the length of the movie in minutes.
+  # This validation ensures that the 'duration' is present and meets specific numerical criteria.
+  # It helps maintain data integrity by preventing invalid or unrealistic durations from being saved to the database.
+  #
+  # Existing Presence Validation:
+  # - The presence of 'duration' is already validated alongside other essential attributes using 'validates_presence_of'.
+  #   - This ensures that the 'duration' attribute is not nil or empty.
+  #
+  # Numericality Validation:
+  # - 'only_integer: true':
+  #   - Specifies that only integer values are valid.
+  #   - Prevents non-integer values (e.g., 90.5) from being accepted.
+  # - 'greater_than: 0':
+  #   - Ensures that the duration is greater than zero.
+  #   - Prevents zero or negative durations, which are invalid for a movie's length.
+  # - 'less_than_or_equal_to: 500':
+  #   - Sets an upper limit to the duration.
+  #   - Assumes that a movie's duration does not exceed 500 minutes (approximately 8 hours).
+  #   - This value can be adjusted based on business requirements or domain knowledge.
+  # - 'message':
+  #   - Provides a custom error message displayed when the validation fails.
+  #   - Helps users understand why their input was invalid.
+  #
+  # Example Usage:
+  # - Valid durations: 90, 120, 150
+  # - Invalid durations: nil, "", -100, 0, 90.5, 600
+  #
+  # Error Handling:
+  # - If the 'duration' fails the validation, the movie record will not be saved.
+  # - The errors can be displayed to the user through the 'errors' collection on the model.
+  validates_numericality_of :duration,
+                            only_integer: true,
+                            greater_than: 0,
+                            less_than_or_equal_to: 500,
+                            message: "must be a positive integer less than or equal to 500"
+
   # Validate that the 'rating' attribute is included in the predefined list of valid ratings.
   # This ensures that only acceptable movie ratings are saved to the database.
   # The list of valid ratings is defined in the RATINGS constant above.
@@ -42,9 +126,9 @@ class Movie < ApplicationRecord
   # Validate that 'total_gross' is a number greater than or equal to 0 for released movies.
   # This ensures that released movies have a valid gross earnings value.
   # Options:
-  # - greater_than_or_equal_to: Specifies the minimum value (0).
-  # - if: :released?: Applies this validation only if the movie is released.
-  # - message: Custom error message displayed when the validation fails.
+  # - 'greater_than_or_equal_to: 0': Specifies the minimum value (0).
+  # - 'if: :released?': Applies this validation only if the movie is released.
+  # - 'message': Custom error message displayed when the validation fails.
   validates_numericality_of :total_gross,
                             greater_than_or_equal_to: 0,
                             if: :released?,
@@ -53,9 +137,9 @@ class Movie < ApplicationRecord
   # Validate that 'total_gross' is exactly 0 for unreleased movies.
   # This prevents assigning gross earnings to movies that have not yet been released.
   # Options:
-  # - equal_to: Specifies the exact value that 'total_gross' must be (0).
-  # - unless: :released?: Applies this validation only if the movie is not released.
-  # - message: Custom error message displayed when the validation fails.
+  # - 'equal_to: 0': Specifies the exact value that 'total_gross' must be (0).
+  # - 'unless: :released?': Applies this validation only if the movie is not released.
+  # - 'message': Custom error message displayed when the validation fails.
   validates_numericality_of :total_gross,
                             equal_to: 0,
                             unless: :released?,
@@ -82,7 +166,11 @@ class Movie < ApplicationRecord
   # The 'image_file_must_exist' method is defined below and will be called during the validation process.
   validate :image_file_must_exist
 
-  # Instance method to determine if the movie is considered a 'flop' based on its total gross earnings.
+  # ============================================================================
+  # Instance Methods
+  # ============================================================================
+
+  # Determine if the movie is considered a 'flop' based on its total gross earnings.
   # A movie is considered a flop if:
   # - The 'total_gross' is blank (not available).
   # - OR the 'total_gross' is less than $225,000,000.
@@ -95,7 +183,7 @@ class Movie < ApplicationRecord
     total_gross.blank? || total_gross < 225_000_000
   end
 
-  # Instance method to check if the movie has been released.
+  # Check if the movie has been released.
   # Returns true if the 'released_on' date is less than or equal to the current time.
   # This method is used in validations and can be used elsewhere in the application.
   # It assumes that the movie is considered released if its release date is in the past or today.
@@ -103,7 +191,11 @@ class Movie < ApplicationRecord
     released_on <= Time.now
   end
 
-  # Class method to retrieve all movies that have been released.
+  # ============================================================================
+  # Class Methods
+  # ============================================================================
+
+  # Retrieve all movies that have been released.
   # It selects movies where the 'released_on' date is before the current time.
   # The results are ordered by the 'released_on' date in descending order,
   # so the most recently released movies appear first.
@@ -112,6 +204,10 @@ class Movie < ApplicationRecord
   def self.released
     where("released_on < ?", Time.now).order(released_on: :desc)
   end
+
+  # ============================================================================
+  # Private Methods
+  # ============================================================================
 
   # Define private methods that are not accessible outside this class.
   # Private methods are used internally within the class and are not part of the public API.
