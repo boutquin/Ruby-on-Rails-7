@@ -1,4 +1,24 @@
-<h1>Creating a movie</h1>
+<!--
+  This is the 'new' view template for creating a new movie.
+  It is located at 'app/views/movies/new.html.erb'.
+  The view displays a heading indicating that the user is creating a new movie
+  and renders a form to input the movie's details.
+  By using the '_form.html.erb' partial, we promote code reuse and maintain consistency between the 'new' and 'edit' forms.
+-->
 
-<%# Use the partial _form.html.rfrb to render the form %>
+<!--
+  Display the page header.
+  - The '<h1>' tag represents a level 1 heading, indicating the main focus of the page.
+  - 'Creating a Movie' informs the user that they are in the process of adding a new movie to the application.
+-->
+<h1>Creating a Movie</h1>
+
+<!--
+  Render the '_form.html.erb' partial to display the form for creating the movie.
+  - The 'render' method includes the specified partial template into the view.
+  - '"form"' refers to the '_form.html.erb' partial located in the same directory ('app/views/movies/').
+  - 'movie: @movie' passes the @movie instance variable to the partial, ensuring that the form fields are associated with a new Movie object.
+  - This approach promotes code reuse and keeps the forms consistent between creating and editing movies.
+  - It also simplifies maintenance, as changes to the form need to be made only in the partial.
+-->
 <%= render "form", movie: @movie %>

@@ -1,13 +1,44 @@
-<%#$ This partial renders the header of the page. %>
+<!--
+  This partial renders the header of the page.
+  It is located at 'app/views/layouts/_header.html.erb'.
+  The header typically appears at the top of every page in the application and includes the navigation bar.
+  It contains the logo linked to the home page and the main navigation links.
+  By using a partial, we ensure consistency across all pages and simplify maintenance.
+-->
+
 <header>
-    <nav>
-        <%# Displays the logo at the top of the page with a link to the home page %>
-        <%= link_to image_tag("logo.png"), root_path %>
-        <%# Displays the navigation links at the top of the page %>
-        <ul>
-            <li>
-            <%= link_to("All Movies", movies_path) %>
-            </li>
-        </ul>
-    </nav>
+  <nav>
+    <!--
+      Display the logo at the top of the page with a link to the home page.
+      - 'image_tag("logo.png")' generates an HTML <img> tag for the 'logo.png' image.
+      - 'link_to' wraps the image tag in a hyperlink that points to the root path of the application.
+      - 'root_path' returns the URL for the root route, which is typically the home page (e.g., '/').
+      - This allows users to click on the logo to return to the home page from any page in the application.
+      - The logo image should be placed in the 'app/assets/images/' directory.
+    -->
+    <%= link_to image_tag("logo.png"), root_path %>
+
+    <!--
+      Display the navigation links at the top of the page.
+      - The '<ul>' element creates an unordered list for the navigation items.
+      - Each navigation link is an '<li>' item within the list.
+      - This structure allows for easy styling of the navigation menu using CSS.
+    -->
+    <ul>
+      <li>
+        <!--
+          Link to the 'All Movies' page.
+          - 'link_to("All Movies", movies_path)' creates a hyperlink with the text 'All Movies'.
+          - 'movies_path' generates the URL for the movies index action (e.g., '/movies').
+          - This link allows users to navigate to the page that lists all movies.
+        -->
+        <%= link_to("All Movies", movies_path) %>
+      </li>
+      <!--
+        Additional navigation items can be added here.
+        - For example, links to 'About Us', 'Contact', 'Sign In', etc.
+        - Each link should be wrapped in an '<li>' element for proper formatting.
+      -->
+    </ul>
+  </nav>
 </header>

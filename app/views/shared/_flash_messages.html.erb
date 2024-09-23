@@ -1,24 +1,54 @@
-<%# This partial displays the flash messages. %>
-<%# The flash messages are used to display notifications, alerts, and errors. %>
-<%# These flash messages are stored in the flash hash. %>
+<!--
+  This partial view is used to display flash messages in the application.
+  Flash messages are temporary notifications that inform the user about the result of their actions,
+  such as successful creation of a record, errors, or alerts.
+  They are stored in the 'flash' hash and persist for one request cycle.
+  Each type of flash message (notice, alert, error) is handled separately to allow for specific styling and display.
+-->
 
-<%# Display the flash notification messages if there are any. %>
+<!--
+  Check if there is a flash notice message to display.
+  'flash[:notice]' retrieves the message stored under the :notice key in the flash hash.
+  If it exists, the content inside this block will be rendered.
+-->
 <% if flash[:notice] %>
-    <div class="flash notice">
-        <%= flash[:notice] %>
-    </div>
+  <!--
+    Display the flash notice message.
+    The 'flash' CSS class is used for general styling of flash messages.
+    The 'notice' CSS class allows for specific styling of notice messages.
+    The message content is output using '<%= flash[:notice] %>'.
+  -->
+  <div class="flash notice">
+    <%= flash[:notice] %>
+  </div>
 <% end %>
 
-<%# Display the flash alert messages if there are any. %>
+<!--
+  Check if there is a flash alert message to display.
+  'flash[:alert]' retrieves the message stored under the :alert key in the flash hash.
+  Alerts are typically used for important information that requires the user's attention.
+-->
 <% if flash[:alert] %>
-    <div class="flash alert">
-        <%= flash[:alert] %>
-    </div>
+  <!--
+    Display the flash alert message.
+    The 'alert' CSS class allows for specific styling of alert messages.
+  -->
+  <div class="flash alert">
+    <%= flash[:alert] %>
+  </div>
 <% end %>
 
-<%# Display the flash error messages if there are any. %>
+<!--
+  Check if there is a flash error message to display.
+  'flash[:error]' retrieves the message stored under the :error key in the flash hash.
+  This is typically used to display error messages resulting from failed operations or validations.
+-->
 <% if flash[:error] %>
-    <div class="flash error">
-        <%= flash[:error] %>
-    </div>
+  <!--
+    Display the flash error message.
+    The 'error' CSS class allows for specific styling of error messages.
+  -->
+  <div class="flash error">
+    <%= flash[:error] %>
+  </div>
 <% end %>

@@ -1,7 +1,28 @@
-    <%# This partial renders the footer of the page. %>
-    <footer>
-      <p>
-        Copyright &copy; <%= Time.now.year %>
-        <%= link_to "Pierre G. Boutquin", "https://github.com/boutquin/Ruby-on-Rails-7" %>
-      </p>
-    </footer>
+<!--
+  This partial renders the footer of the page.
+  It is located at 'app/views/layouts/_footer.html.erb'.
+  The footer typically appears at the bottom of every page in the application.
+  It contains information such as copyright notices,
+  links to the developer or organization, and other pertinent information.
+  By using a partial, we ensure consistency across all pages and simplify maintenance.
+-->
+
+<footer>
+  <p>
+    <!--
+      Display the copyright notice.
+      - '&copy;' is an HTML entity representing the © symbol.
+      - 'Time.now.year' retrieves the current year dynamically.
+      - This ensures the footer always shows the current year without manual updates.
+    -->
+    &copy; <%= Time.now.year %>
+
+    <!--
+      Link to the developer's GitHub repository.
+      - 'link_to' creates a hyperlink with the text 'Pierre G. Boutquin'.
+      - The second argument is the URL to the GitHub repository.
+      - This provides users with a way to learn more about the developer or access the source code.
+    -->
+    <%= link_to "Pierre G. Boutquin", "https://github.com/boutquin/Ruby-on-Rails-7" %>
+  </p>
+</footer>
