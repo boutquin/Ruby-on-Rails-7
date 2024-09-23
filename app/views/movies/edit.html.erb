@@ -1,4 +1,26 @@
+<!--
+  This is the 'edit' view template for editing an existing movie.
+  It is located at 'app/views/movies/edit.html.erb'.
+  The view displays a heading indicating that the user is editing a specific movie
+  and renders a form to update the movie's details.
+  By using the '_form.html.erb' partial, we promote code reuse and maintain consistency between the 'new' and 'edit' forms.
+-->
+
+<!--
+  Display the page header with the movie title.
+  - '@movie' is an instance variable containing the movie object to be edited.
+  - '@movie.title' retrieves the title of the movie from the object.
+  - The '<h1>' tag represents a level 1 heading, indicating the main focus of the page.
+  - This heading provides context to the user, showing which movie they are currently editing.
+-->
 <h1>Editing <%= @movie.title %></h1>
 
-<%# Use the partial _form.html.rfrb to render the form %>
+<!--
+  Render the '_form.html.erb' partial to display the form for editing the movie.
+  - The 'render' method includes the specified partial template into the view.
+  - '"form"' refers to the '_form.html.erb' partial located in the same directory ('app/views/movies/').
+  - 'movie: @movie' passes the @movie instance variable to the partial, ensuring that the form fields are pre-populated with the movie's existing data.
+  - This approach promotes code reuse and keeps the forms consistent between creating and editing movies.
+  - It also simplifies maintenance, as changes to the form need to be made only in the partial.
+-->
 <%= render "form", movie: @movie %>

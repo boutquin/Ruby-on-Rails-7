@@ -2,6 +2,10 @@
 # It provides actions for listing, displaying, creating, updating, and deleting movies.
 # This controller follows RESTful conventions, mapping HTTP verbs to controller actions.
 class MoviesController < ApplicationController
+  # ============================================================================
+  # Actions
+  # ============================================================================
+
   # GET /movies
   # The index action retrieves all released movies from the database
   # and assigns them to an instance variable for use in the index view.
@@ -102,6 +106,10 @@ class MoviesController < ApplicationController
     # indicating that the resource has been replaced and the client should perform a GET request to the new URL.
     redirect_to movies_url, status: :see_other
   end
+
+  # ============================================================================
+  # Private Methods
+  # ============================================================================
 
   # The 'private' keyword marks all subsequent methods as private.
   # Private methods are internal helper methods and cannot be accessed externally (e.g., via a URL).

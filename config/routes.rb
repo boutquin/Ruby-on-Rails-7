@@ -1,6 +1,7 @@
 # The 'routes.rb' file is a crucial part of a Ruby on Rails application.
 # It defines the mapping between URLs (HTTP requests) and controller actions (code that handles the requests).
 # This file uses a domain-specific language (DSL) provided by Rails to specify routes in a clear and concise manner.
+
 Rails.application.routes.draw do
   # ============================================================================
   # General Routing Guide
@@ -82,11 +83,16 @@ Rails.application.routes.draw do
   root "movies#index"
 
   # ============================================================================
-  # Resources for Movies
+  # Resources for Movies (with Nested Reviews)
   # ============================================================================
-  # The 'resources' method generates RESTful routes for the 'movies' resource, similar to the 'reviews' resource above.
+  # The 'resources' method generates RESTful routes for the 'movies' resource.
+  # By nesting 'reviews' within 'movies', we create routes that reflect the hierarchical relationship between movies and reviews.
   #
-  # Generated Routes:
+  # Nested Resources:
+  # - Indicates that reviews are a sub-resource of movies.
+  # - Allows us to access reviews in the context of a specific movie.
+  #
+  # Generated Routes for Movies:
   # - GET    /movies          => movies#index   (list all movies)
   # - GET    /movies/new      => movies#new     (form for a new movie)
   # - POST   /movies          => movies#create  (create a new movie)
@@ -96,25 +102,31 @@ Rails.application.routes.draw do
   # - PUT    /movies/:id      => movies#update  (alternative to PATCH)
   # - DELETE /movies/:id      => movies#destroy (delete a specific movie)
   #
+  # Generated Nested Routes for Reviews:
+  # - GET    /movies/:movie_id/reviews          => reviews#index   (list all reviews for a movie)
+  # - GET    /movies/:movie_id/reviews/new      => reviews#new     (form for a new review for a movie)
+  # - POST   /movies/:movie_id/reviews          => reviews#create  (create a new review for a movie)
+  # - GET    /movies/:movie_id/reviews/:id      => reviews#show    (show a specific review for a movie)
+  # - GET    /movies/:movie_id/reviews/:id/edit => reviews#edit    (form to edit a review for a movie)
+  # - PATCH  /movies/:movie_id/reviews/:id      => reviews#update  (update a specific review for a movie)
+  # - PUT    /movies/:movie_id/reviews/:id      => reviews#update  (alternative to PATCH)
+  # - DELETE /movies/:movie_id/reviews/:id      => reviews#destroy (delete a specific review for a movie)
+  #
   # Notes:
-  # - These routes provide full CRUD functionality for movies.
-  # - The routes map HTTP verbs and URLs to controller actions in the 'MoviesController'.
-  resources :movies
+  # - The nested routes provide a way to handle reviews in the context of a specific movie.
+  # - URL patterns include the movie ID, reflecting the parent-child relationship.
+  # - Named route helpers are generated accordingly, e.g.,
+  #   - movie_reviews_path(@movie): path to the index of reviews for a movie.
+  #   - new_movie_review_path(@movie): path to the form for creating a new review for a movie.
+  #   - edit_movie_review_path(@movie, @review): path to the form for editing a review.
+  resources :movies do
+    resources :reviews
+  end
 
   # ============================================================================
-  # Resources for Reviews
+  # Additional Routes (If Any)
   # ============================================================================
-  # The 'resources' method automatically creates RESTful routes for a resource.
-  # For the 'reviews' resource, it generates the following routes:
-  # - GET    /reviews          => reviews#index   (list all reviews)
-  # - GET    /reviews/new      => reviews#new     (form for a new review)
-  # - POST   /reviews          => reviews#create  (create a new review)
-  # - GET    /reviews/:id      => reviews#show    (show a specific review)
-  # - GET    /reviews/:id/edit => reviews#edit    (form to edit a review)
-  # - PATCH  /reviews/:id      => reviews#update  (update a specific review)
-  # - PUT    /reviews/:id      => reviews#update  (alternative to PATCH)
-  # - DELETE /reviews/:id      => reviews#destroy (delete a specific review)
-  #
-  # These routes provide a full set of CRUD (Create, Read, Update, Delete) actions for reviews.
-  resources :reviews
+  # If you have other resources or custom routes, they can be defined here.
+  # For example, if you have an 'actors' resource:
+  # resources :actors
 end

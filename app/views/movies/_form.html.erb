@@ -1,49 +1,134 @@
-<%# This partial form is used to render the form for both the new and edit actions. %>
-<%# The form builder is used to generate the form fields. %>
+<!--
+  This partial form is used for both the 'new' and 'edit' actions in the MoviesController.
+  It allows users to create a new movie or edit an existing one.
+  The 'form_with' helper is used to generate the form elements.
+  - 'model: movie' binds the form to the @movie instance variable.
+  - 'local: true' ensures that the form submits synchronously via HTTP POST, not via AJAX.
+-->
 <%= form_with(model: movie, local: true) do |form| %>
-  <%# Display an error message if there are any errors for the movie object. %>
+  <!--
+    Render the shared errors partial if there are any validation errors on the @movie object.
+    - The 'render' method includes the '_errors.html.erb' partial from 'app/views/shared/'.
+    - 'object: movie' passes the @movie object to the partial for displaying error messages.
+  -->
   <%= render "shared/errors", object: movie %>
 
-  <%# Display the form fields for the movie object. %>
+  <!-- Form fields for the movie attributes -->
   <div>
+    <!--
+      Label for the 'title' field.
+      - 'form.label :title' generates a <label> element associated with the 'title' input.
+    -->
     <%= form.label :title %>
-      <%= form.text_field :title, autofocus: true %>
+    <!--
+      Text field for the 'title' attribute.
+      - 'form.text_field :title' generates an <input type="text"> for the movie's title.
+      - 'autofocus: true' sets the focus to this field when the form loads.
+    -->
+    <%= form.text_field :title, autofocus: true %>
   </div>
+
   <div>
+    <!--
+      Label for the 'description' field.
+    -->
     <%= form.label :description %>
+    <!--
+      Text area for the 'description' attribute.
+      - 'rows: 10' sets the number of visible text lines to 10.
+    -->
     <%= form.text_area :description, rows: 10 %>
   </div>
+
   <div>
+    <!--
+      Label for the 'rating' field.
+    -->
     <%= form.label :rating %>
-    <%# Uses a selector to allow the user to pick a rating. %>
+    <!--
+      Select dropdown for the 'rating' attribute.
+      - 'Movie::RATINGS' provides the options array (e.g., ["G", "PG", "PG-13", "R", "NC-17"]).
+      - 'prompt: "Pick one"' adds a placeholder option prompting the user to select a rating.
+    -->
     <%= form.select :rating, Movie::RATINGS, prompt: "Pick one" %>
   </div>
+
   <div>
+    <!--
+      Label for the 'released_on' field.
+    -->
     <%= form.label :released_on %>
+    <!--
+      Date selector for the 'released_on' attribute.
+      - 'form.date_select' generates select elements for year, month, and day.
+      - The first empty hash '{}' is for options (e.g., order, include_blank), left empty here.
+      - The second hash '{class: "date"}' adds a CSS class 'date' to each select element for styling.
+    -->
     <%= form.date_select :released_on, {}, {class: "date"} %>
-    <%# Alternately, one can also use the date_field form helper to create a date input field. %>
-    <%# form.date_field :released_on %>
+    <!--
+      Alternatively, you can use 'form.date_field :released_on' for an HTML5 date input.
+      - This provides a date picker UI in browsers that support it.
+      - Uncomment the following line to use 'date_field' instead:
+      -->
+    <!-- <%= form.date_field :released_on %> -->
   </div>
+
   <div>
+    <!--
+      Label for the 'director' field.
+    -->
     <%= form.label :director %>
+    <!--
+      Text field for the 'director' attribute.
+    -->
     <%= form.text_field :director %>
   </div>
+
   <div>
+    <!--
+      Label for the 'duration' field.
+      - The second argument 'Duration (in mins)' customizes the label text.
+    -->
     <%= form.label :duration, "Duration (in mins)" %>
+    <!--
+      Text field for the 'duration' attribute.
+      - Consider using 'number_field' to restrict input to numeric values.
+      - For example, replace with 'form.number_field :duration' if desired.
+    -->
     <%= form.text_field :duration %>
   </div>
+
   <div>
+    <!--
+      Label for the 'image_file_name' field.
+    -->
     <%= form.label :image_file_name %>
+    <!--
+      Text field for the 'image_file_name' attribute.
+      - This should contain the filename of the movie's image (e.g., "movie_poster.jpg").
+    -->
     <%= form.text_field :image_file_name %>
   </div>
+
   <div>
+    <!--
+      Label for the 'total_gross' field.
+    -->
     <%= form.label :total_gross %>
+    <!--
+      Text field for the 'total_gross' attribute.
+      - Again, consider using 'number_field' for numeric input.
+    -->
     <%= form.text_field :total_gross %>
   </div>
+
   <div>
-    <%# The form builder is responsible for generating the submit button with a proper caption. %>
-    <%# For a new record, the caption is "Create Movie". %>
-    <%# For an existing record, the caption is "Update Movie". %>
+    <!--
+      Submit button for the form.
+      - 'form.submit' automatically sets the button text based on whether the movie is a new record or persisted.
+      - For a new movie, the button will display "Create Movie".
+      - For an existing movie, it will display "Update Movie".
+    -->
     <%= form.submit %>
   </div>
-  <% end %>
+<% end %>

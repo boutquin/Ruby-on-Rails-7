@@ -1,0 +1,67 @@
+<!--
+  This is the index view template for displaying reviews associated with a specific movie.
+  It is located at 'app/views/reviews/index.html.erb'.
+  The view iterates over a collection of reviews and displays each one in a structured format.
+-->
+
+<!--
+  Display the header with the movie title.
+  - '@movie' is an instance variable containing the movie object, set in the controller.
+  - '@movie.title' retrieves the title of the movie.
+  - 'link_to' creates a hyperlink to the movie's show page.
+  - This allows users to click on the movie title and navigate to its detailed view.
+-->
+<h1>Reviews for <%= link_to @movie.title, @movie %></h1>
+
+<!--
+  Begin an unordered list to contain the reviews.
+  - The 'reviews' class can be used for styling purposes in CSS.
+  - Each review will be represented as a list item within this list.
+-->
+<ul class="reviews">
+  <!--
+    Iterate over the '@reviews' collection.
+    - '@reviews' is an instance variable containing all reviews for the movie.
+    - It is set in the 'index' action of the 'ReviewsController'.
+    - The 'each' method loops through each review in the collection.
+  -->
+  <% @reviews.each do |review| %>
+    <!--
+      For each review, create a list item to display its content.
+      - The content includes the star rating, reviewer's name, time since creation, and the comment.
+    -->
+    <li>
+      <!--
+        Display the number of stars for the review.
+        - 'review.stars' is an integer representing the number of stars given by the reviewer.
+        - 'pluralize' helper method pluralizes the word 'star' based on the value.
+        - Example: If 'review.stars' is 3, it displays '3 stars'.
+      -->
+      <%= pluralize(review.stars, 'star') %>
+
+      <!--
+        Display the reviewer's name and the time since the review was created.
+        - 'review.name' contains the name of the person who wrote the review.
+        - 'time_ago_in_words' calculates the approximate time elapsed since 'review.created_at'.
+        - It returns a string like '5 minutes' or '2 days'.
+        - Adding 'ago' provides context, resulting in '5 minutes ago'.
+        - The 'date' class can be used for styling the timestamp.
+      -->
+      <p>
+        <%= review.name %>
+        <span class="date">
+          <%= time_ago_in_words(review.created_at) %> ago
+        </span>
+      </p>
+
+      <!--
+        Display the comment content of the review.
+        - 'review.comment' contains the text of the review left by the user.
+        - Wrapping it in a paragraph tag for proper formatting.
+      -->
+      <p>
+        <%= review.comment %>
+      </p>
+    </li>
+  <% end %>
+</ul>

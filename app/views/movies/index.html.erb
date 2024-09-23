@@ -1,15 +1,56 @@
-<%# Iterating over the movies collection and displaying each movie %>
+<!--
+  This is the index view template for displaying a list of movies.
+  It is located at 'app/views/movies/index.html.erb'.
+  The view iterates over a collection of movies and displays each one in a structured format.
+-->
+
+<!--
+  Iterate over the '@movies' collection.
+  - '@movies' is an instance variable containing all the movies to be displayed.
+  - It is set in the 'index' action of the 'MoviesController'.
+  - The 'each' method loops through each movie in the collection.
+  - 'movie' is the variable representing the current movie in the iteration.
+-->
 <% @movies.each do |movie| %>
+  <!--
+    Start a section for an individual movie.
+    - The 'movie' class can be used for styling purposes in CSS.
+    - This section contains the summary information for a single movie.
+  -->
   <section class="movie">
     <div class="summary">
-      <%# List the movie title, total gross, and a truncated description %>
+      <!--
+        Display the movie title as a heading.
+        - The 'h2' tag represents a level 2 heading.
+        - 'link_to' creates a hyperlink to the movie's show page.
+        - 'movie.title' retrieves the title of the movie.
+        - 'movie' is passed as the second argument to 'link_to', which Rails translates to the movie's show path.
+        - The release date is formatted and displayed next to the title.
+        - 'movie.released_on.strftime "%Y-%m-%d"' formats the release date as 'YYYY-MM-DD'.
+      -->
       <h2>
-        <%# Title of the movie with a link to the movie's details page %>
         <%= link_to movie.title, movie %> (<%= movie.released_on.strftime "%Y-%m-%d" %>)
       </h2>
+
+      <!--
+        Display the total gross of the movie.
+        - The 'h3' tag represents a level 3 heading.
+        - 'total_gross(movie)' is a helper method defined in 'MoviesHelper'.
+        - It formats the total gross as currency or displays 'Flop!' if the movie is considered a flop.
+      -->
       <h3>
         <%= total_gross(movie) %>
       </h3>
+
+      <!--
+        Display a truncated version of the movie's description.
+        - The 'p' tag represents a paragraph.
+        - 'truncate' is a Rails helper method that truncates text to a specified length.
+        - 'movie.description' contains the full description of the movie.
+        - 'length: 150' limits the description to 150 characters.
+        - 'separator: ' '' ensures that truncation happens at word boundaries (spaces).
+        - This provides a brief overview of the movie without overwhelming the user with too much text.
+      -->
       <p>
         <%= truncate(movie.description, length: 150, separator: ' ') %>
       </p>
@@ -17,7 +58,14 @@
   </section>
 <% end %>
 
-<%# Button for adding a new movie %>
+<!--
+  Display a section with a button for adding a new movie.
+  - The 'admin' class can be used for styling purposes, possibly to differentiate admin actions.
+  - 'link_to' creates a hyperlink styled as a button.
+  - 'new_movie_path' generates the path to the 'new' action of the 'MoviesController'.
+  - The 'class: "button"' option adds a CSS class to style the link as a button.
+  - This provides an easy way for users (or admins) to add a new movie to the collection.
+-->
 <section class="admin">
   <%= link_to "Add New Movie", new_movie_path, class: "button" %>
 </section>

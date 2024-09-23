@@ -1,16 +1,63 @@
+<!--
+  This is a shared partial view for displaying validation error messages in forms.
+  It is typically rendered when a form submission fails due to validation errors.
+  The partial expects an 'object' variable, which is an instance of a model that may contain errors.
+-->
+
 <% if object.errors.any? %>
+  <!--
+    Checks if the 'object' has any validation errors.
+    'object.errors.any?' returns true if there are errors, false otherwise.
+    If there are errors, the content inside this block will be rendered.
+  -->
   <section class="errors">
+    <!--
+      The 'errors' section groups the error messages for styling purposes.
+      You can apply CSS styles to '.errors' to customize the appearance.
+    -->
     <h2>
+      <!--
+        A user-friendly message indicating that the form could not be saved.
+        This provides immediate feedback to the user that something went wrong.
+      -->
       Oops! Your form could not be saved.
     </h2>
     <h3>
+      <!--
+        A prompt asking the user to correct the errors.
+        Uses the 'pluralize' helper to display the correct singular or plural form of "error".
+        'object.errors.size' returns the total number of errors on the object.
+        Example:
+          - If there is 1 error, it displays "Please correct the following 1 error:".
+          - If there are multiple errors, it displays "Please correct the following X errors:".
+      -->
       Please correct the following
       <%= pluralize(object.errors.size, "error") %>:
     </h3>
     <ul>
+      <!--
+        Iterates over each error message in the object's full error messages.
+        'object.errors.full_messages' returns an array of formatted error messages.
+        Each message is then displayed within a list item.
+      -->
       <% object.errors.full_messages.each do |message| %>
         <li><%= message %></li>
+        <!--
+          Displays the error message.
+          '<%= message %>' outputs the error message to the view.
+          Each message is wrapped in a <li> element for list formatting.
+          Examples of error messages:
+            - "Title can't be blank"
+            - "Duration must be a positive integer less than or equal to 500"
+        -->
       <% end %>
     </ul>
   </section>
+  <!--
+    End of the errors section.
+  -->
 <% end %>
+<!--
+  If there are no errors (i.e., 'object.errors.any?' returns false), the entire error section will not be rendered.
+  This ensures that the user only sees error messages when there are actual errors to display.
+-->

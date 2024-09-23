@@ -1,29 +1,102 @@
+<!--
+  This is the main application layout file for the Rails application.
+  It is located at 'app/views/layouts/application.html.erb'.
+  The layout defines the overall HTML structure that wraps around the views rendered by the controllers.
+  It includes common elements like the DOCTYPE declaration, HTML head, and body tags.
+  The layout uses Embedded Ruby (ERB) to dynamically insert content and manage assets.
+-->
+
 <!DOCTYPE html>
 <html>
   <head>
+    <!--
+      Set the page title.
+      - '<%= content_for(:title) || "Flix" %>' allows individual views to set the page title using 'content_for :title'.
+      - If a view provides content for :title, it will be used; otherwise, "Flix" is the default title.
+      - The '<title>' tag defines the title of the document shown in the browser's title bar or tab.
+    -->
     <title><%= content_for(:title) || "Flix" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!--
+      Responsive Design Meta Tag.
+      - '<meta name="viewport" content="width=device-width, initial-scale=1">' ensures the page is mobile-friendly.
+      - Sets the viewport to match the device's width and sets the initial zoom level to 1.
+      - This tag is essential for proper rendering on mobile devices.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--
+      Apple Mobile Web App Capability.
+      - '<meta name="apple-mobile-web-app-capable" content="yes">' allows the web app to run in full-screen mode on iOS devices.
+      - When users add the web app to their home screen, it can launch without the browser UI.
+    -->
     <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!--
+      CSRF Meta Tags.
+      - '<%= csrf_meta_tags %>' includes authenticity tokens in meta tags to protect against Cross-Site Request Forgery attacks.
+      - Rails uses these tokens to verify that form submissions and AJAX requests come from the same site.
+    -->
     <%= csrf_meta_tags %>
+
+    <!--
+      Content Security Policy Meta Tag.
+      - '<%= csp_meta_tag %>' adds a Content Security Policy to prevent cross-site scripting (XSS) and data injection attacks.
+      - It defines approved sources of content that browsers should load on the page.
+    -->
     <%= csp_meta_tag %>
 
+    <!--
+      Yield content for the :head section.
+      - '<%= yield :head %>' allows individual views to inject additional content into the <head> section.
+      - Useful for adding page-specific stylesheets, scripts, or meta tags.
+    -->
     <%= yield :head %>
 
+    <!--
+      Stylesheet Link Tag.
+      - '<%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>' includes the main CSS file for the application.
+      - 'application' refers to 'app/assets/stylesheets/application.css' or '.scss'.
+      - The 'data-turbo-track': 'reload' attribute tells Turbo Drive (part of Hotwire) to reload the page when the stylesheet changes.
+    -->
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <!--
+      JavaScript Importmap Tags.
+      - '<%= javascript_importmap_tags %>' includes JavaScript modules defined in 'config/importmap.rb'.
+      - Importmaps allow you to manage JavaScript dependencies without a bundler like Webpack.
+      - This tag generates <script> tags to load the modules.
+    -->
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <%# Displays the header at the top of the page %>
+    <!--
+      Display the header at the top of the page.
+      - '<%= render "layouts/header" %>' includes the '_header.html.erb' partial from 'app/views/layouts/'.
+      - This typically contains the site's navigation menu, logo, and branding elements.
+      - Using a partial allows for consistent headers across all pages and simplifies maintenance.
+    -->
     <%= render "layouts/header" %>
 
-    <%# Displays the main content of the page %>
+    <!--
+      Display the main content of the page.
+      - '<div class="content">' wraps the main content for styling purposes.
+      - '<%= render "shared/flash_messages" %>' includes flash messages to display notifications to the user.
+      - '<%= yield %>' inserts the content from the view templates that use this layout.
+      - The 'yield' keyword is where the main content from each controller action's view is rendered.
+    -->
     <div class="content">
       <%= render "shared/flash_messages" %>
       <%= yield %>
     </div>
     
-    <%# Displays the footer at the bottom of the page %>
+    <!--
+      Display the footer at the bottom of the page.
+      - '<%= render "layouts/footer" %>' includes the '_footer.html.erb' partial from 'app/views/layouts/'.
+      - The footer typically contains site information, links to policies, and contact information.
+      - Using a partial ensures consistency and easier updates across all pages.
+    -->
     <%= render "layouts/footer" %>
   </body>
 </html>
