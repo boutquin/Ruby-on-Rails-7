@@ -38,13 +38,19 @@
     </h2>
 
     <!--
-      Display a link to the reviews for the movie.
-      - 'pluralize' helper method correctly pluralizes 'review' based on the number of reviews.
+      Display the average star rating and a link to the reviews for the movie.
+      - '@movie.average_stars' calls a method that calculates the average rating from all reviews associated with the movie.
+        - Returns a float representing the average stars, or 0.0 if there are no reviews.
+        - The average rating is formatted and displayed to the user, e.g., "Average Rating: 4.5 stars".
       - '@movie.reviews.size' returns the number of reviews associated with the movie.
-      - 'movie_reviews_path(@movie)' generates the URL to the movie's reviews index page.
-      - This link allows users to navigate to the reviews page for the movie.
+        - 'pluralize(@movie.reviews.size, "review")' adjusts "review" to "reviews" when appropriate.
+        - 'movie_reviews_path(@movie)' generates the URL to the movie's reviews index page.
+        - This section allows users to see the movie's average rating and navigate to the reviews page.
     -->
     <div class="reviews">
+      <!-- Display the average star rating, rounded to one decimal place -->
+      <%= "Average Rating: #{@movie.average_stars.round(1)} stars" %>
+      <!-- Link to the movie's reviews page with the correct pluralization of 'review' -->
       <%= link_to pluralize(@movie.reviews.size, "review"), movie_reviews_path(@movie) %>
     </div>
 
