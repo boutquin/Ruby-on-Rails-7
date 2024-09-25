@@ -34,8 +34,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_24_231944) do
     t.index ["movie_id"], name: "index_reviews_on_movie_id"
   end
 
-  create_table "users", id: false, force: :cascade do |t|
-    t.string "id", null: false
+  create_table "users", id: :string, force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.string "password_digest"

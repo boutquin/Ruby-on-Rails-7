@@ -1,44 +1,127 @@
 <!--
-  This partial renders the header of the page.
-  It is located at 'app/views/layouts/_header.html.erb'.
-  The header typically appears at the top of every page in the application and includes the navigation bar.
-  It contains the logo linked to the home page and the main navigation links.
-  By using a partial, we ensure consistency across all pages and simplify maintenance.
+  This partial view template renders the header of the application, providing
+  navigation links for users to access different parts of the site. It includes
+  branding elements, navigation items, and user account options based on the
+  authentication state of the user.
+
+  The header is structured using semantic HTML elements, enhancing both
+  accessibility and SEO. The navigation is split into two sections: one for 
+  general site links (left) and one for user-specific actions (right).
 -->
 
 <header>
-  <nav>
-    <!--
-      Display the logo at the top of the page with a link to the home page.
-      - 'image_tag("logo.png")' generates an HTML <img> tag for the 'logo.png' image.
-      - 'link_to' wraps the image tag in a hyperlink that points to the root path of the application.
-      - 'root_path' returns the URL for the root route, which is typically the home page (e.g., '/').
-      - This allows users to click on the logo to return to the home page from any page in the application.
-      - The logo image should be placed in the 'app/assets/images/' directory.
-    -->
-    <%= link_to image_tag("logo.png"), root_path %>
+  <!-- 
+    The <header> element serves as a container for introductory content or 
+    navigational links. It helps define the top section of the webpage, providing
+    a clear starting point for users as they interact with the application.
+  -->
 
-    <!--
-      Display the navigation links at the top of the page.
-      - The '<ul>' element creates an unordered list for the navigation items.
-      - Each navigation link is an '<li>' item within the list.
-      - This structure allows for easy styling of the navigation menu using CSS.
+  <nav>
+  <!-- 
+    The <nav> element defines a set of navigation links. This indicates to search
+    engines and assistive technologies that the links contained within are 
+    related to navigation. The <nav> element enhances the structure of the 
+    document, improving both usability and accessibility.
+  -->
+
+    <%= image_tag("logo.png") %>
+    <!-- 
+      This line renders an image for the application logo.
+      - The 'image_tag' helper generates the appropriate <img> HTML element.
+      - The logo serves as a branding element for the application and is usually
+        linked to the home page.
+      - The image is pulled from the assets pipeline, so it should be located 
+        in the app/assets/images directory. If the logo is missing, Rails will 
+        raise an error indicating that the file could not be found.
     -->
-    <ul>
+
+    <ul class="left">
+    <!-- 
+      This unordered list represents the left section of the navigation menu.
+      - The "left" class may be used for styling purposes, allowing CSS to 
+        format this list separately from the right list.
+      - It can contain links that are generally accessible to all users.
+    -->
       <li>
-        <!--
-          Link to the 'All Movies' page.
-          - 'link_to("All Movies", movies_path)' creates a hyperlink with the text 'All Movies'.
-          - 'movies_path' generates the URL for the movies index action (e.g., '/movies').
-          - This link allows users to navigate to the page that lists all movies.
+        <%= link_to "All Movies", movies_path %>
+        <!-- 
+          This list item contains a link to the "All Movies" page.
+          - The 'link_to' helper creates a hyperlink to the movies_path, which
+            points to the index action of the MoviesController.
+          - The text "All Movies" is displayed as the clickable text for the link.
+          - This link is essential for users to navigate to the main content area of
+            the application.
         -->
-        <%= link_to("All Movies", movies_path) %>
       </li>
-      <!--
-        Additional navigation items can be added here.
-        - For example, links to 'About Us', 'Contact', 'Sign In', etc.
-        - Each link should be wrapped in an '<li>' element for proper formatting.
+    </ul>
+
+    <ul class="right">
+    <!-- 
+      This unordered list represents the right section of the navigation menu.
+      - The "right" class is used for styling and may help to position this
+        menu differently in the layout.
+      - It contains links related to user account management and actions.
+    -->
+      <% if current_user %>
+      <!-- 
+        This conditional checks if a user is currently signed in (authenticated).
+        - The 'current_user' method typically returns the user object if a user 
+          is logged in, or nil if not.
+        - This check allows for different navigation options based on the user's
+          authentication status.
       -->
+        <li>
+          <%= link_to current_user.name, current_user %>
+          <!-- 
+            This list item displays the name of the currently signed-in user.
+            - The 'link_to' helper generates a link using the user's name, which 
+              links to the user's profile page.
+            - By using 'current_user', the link dynamically updates to reflect the
+              logged-in user's name, enhancing personalization of the UI.
+          -->
+        </li>
+        <li>
+          <%= link_to "Sign Out", signout_path,
+                data: { turbo_method: :delete },
+                class: "button" %>
+          <!-- 
+            This list item creates a link for the user to sign out.
+            - The 'link_to' helper generates a link labeled "Sign Out" that directs 
+              to the signout_path, which maps to the SessionsController's destroy action.
+            - The data attribute 'turbo_method: :delete' indicates that this link
+              will perform a DELETE request when clicked, allowing for RESTful
+              session termination.
+            - The "button" class can be styled to give the link the appearance of a
+              button, enhancing the user interface.
+          -->
+        </li>
+      <% else %>
+      <!-- 
+        This block is executed if there is no currently signed-in user.
+        - It provides navigation options for users who are not logged in, allowing
+          them to sign in or register for a new account.
+      -->
+        <li>
+          <%= link_to "Sign In", signin_path, class: "button" %>
+          <!-- 
+            This list item creates a link for users to sign in to their accounts.
+            - The link is labeled "Sign In" and points to the signin_path,
+              which directs users to the SessionsController's new action (the sign-in form).
+            - The "button" class can be styled to enhance the appearance of the link.
+          -->
+        </li>
+        <li>
+          <%= link_to "Sign Up", signup_path, class: "button" %>
+          <!-- 
+            This list item creates a link for users to create a new account.
+            - The link is labeled "Sign Up" and points to the signup_path,
+              which directs users to the UsersController's new action (the registration form).
+            - This option encourages new users to join the application and is crucial 
+              for user onboarding.
+            - The "button" class can also be styled to make this link visually appealing.
+          -->
+        </li>
+      <% end %>
     </ul>
   </nav>
 </header>
