@@ -83,6 +83,91 @@ Rails.application.routes.draw do
   root "movies#index"
 
   # ============================================================================
+  # Signup Route Configuration
+  # ============================================================================
+  # This route defines the path that users will visit to access the
+  # sign-up page for creating a new account in the application.
+  #
+  # The route uses the `get` HTTP method, indicating that this route
+  # will respond to GET requests. A GET request is typically used
+  # to retrieve and display a resource without making any changes
+  # to the server's state.
+  get "signup" => "users#new"
+  # ============================================================================
+  # Route Details:
+  # - HTTP Verb: GET
+  #   The GET method is used here because we want to retrieve and
+  #   display the sign-up form to the user. This is the standard
+  #   method for rendering a web page without altering server-side
+  #   data.
+  #
+  # - Path: /signup
+  #   This is the URL that users will navigate to in order to
+  #   access the sign-up form. It is a user-friendly and intuitive
+  #   path that clearly indicates its purpose, making it easy for
+  #   users to find the sign-up feature.
+  #
+  # - Controller#Action: users#new
+  #   This notation specifies that the request will be handled
+  #   by the `new` action within the `UsersController`. The `new`
+  #   action is typically responsible for initializing a new user
+  #   object and rendering the sign-up form.
+  #
+  #   The `UsersController` is likely where user-related actions
+  #   are defined, including creating, updating, and deleting users.
+  #
+  #   The `new` action prepares the necessary instance variables
+  #   (if any) and presents the form for the user to fill out.
+  #
+  #   Example of Typical Implementation in UsersController:
+  #   class UsersController < ApplicationController
+  #     def new
+  #       @user = User.new
+  #       # This initializes a new User object that will be used in the form.
+  #       # The form will be populated with this new user instance to collect
+  #       # user input such as name, email, and password.
+  #     end
+  #   end
+  #
+  # ============================================================================
+  # Named Route Helper:
+  # - The route defined above will automatically create a named helper method
+  #   that can be used throughout the application to generate the path to this
+  #   route. By default, the helper method will be `signup_path` or
+  #   `signup_url`.
+  #
+  #   Example Usage:
+  #   - In a view or controller, you can use:
+  #     <%= link_to "Sign Up", signup_path %>
+  #     This generates a link that directs users to the sign-up page.
+  #
+  #   - You can also use this helper in redirects:
+  #     redirect_to signup_path
+  #     This redirects users to the sign-up page programmatically.
+  #
+  # ============================================================================
+  # Important Notes:
+  # - The `signup` route is a crucial part of user registration flow.
+  #   It should be easily accessible from other parts of the application,
+  #   such as the home page or login page, allowing new users to
+  #   register easily.
+  #
+  # - Considerations for Security and Usability:
+  #   - Ensure that the sign-up form includes validations and error
+  #     handling to provide feedback to the user in case of invalid input.
+  #   - It may also be beneficial to include additional information
+  #     about the benefits of signing up or the features available
+  #     to registered users, enhancing user engagement and conversion.
+  #
+  # - As the application evolves, this route may be modified to
+  #   incorporate additional features such as social sign-ups,
+  #   CAPTCHA for spam prevention, or terms of service agreements.
+  #
+  # Overall, this route sets the foundation for user account creation,
+  # and it is vital that it is designed with user experience and security
+  # considerations in mind.
+
+  # ============================================================================
   # Resources for Movies (with Nested Reviews)
   # ============================================================================
   # The 'resources' method generates RESTful routes for the 'movies' resource.

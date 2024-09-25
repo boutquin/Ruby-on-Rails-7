@@ -1,0 +1,33 @@
+<!-- ============================================================================
+# User Sign Up View
+# ============================================================================
+# This view template provides a sign-up form for new users to create an account
+# within the application. It uses embedded Ruby (ERB) to dynamically generate 
+# HTML content based on the data passed from the UsersController.
+#
+# The template assumes that the @user instance variable is a new instance of the 
+# User model, populated in the new action of the UsersController. The form 
+# allows users to enter their details, including name, email, password, and 
+# password confirmation. Upon submission, the form data will be processed to 
+# create a new user account.
+# ============================================================================
+-->
+
+<h1>Sign Up</h1>
+<!-- This H1 heading clearly indicates the purpose of the page as the sign-up
+     section for new users. It helps orient users as to what action they 
+     are about to perform. -->
+
+<%= render "form", user: @user %>
+<!-- This line renders a partial template called "form" that contains the 
+     actual form fields for user registration. The user variable is passed 
+     to the form partial, which allows it to be either a new user or an 
+     existing user being edited.
+     The "form" partial is expected to handle the creation of the form 
+     elements, including fields for the user's name, email, password, 
+     and password confirmation.
+     The form utilizes Rails' form helpers, which handle setting up the 
+     necessary input fields based on the user model's attributes, 
+     making it easier to manage user data validation and submission. 
+     This encapsulation allows for better code organization and 
+     reusability across the application. -->

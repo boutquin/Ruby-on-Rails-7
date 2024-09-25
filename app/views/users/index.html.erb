@@ -1,0 +1,99 @@
+<!--
+  This view template displays a list of users in the application.
+  It utilizes embedded Ruby (ERB) to dynamically generate HTML content
+  based on the data passed from the UsersController.
+
+  The template assumes that the @users instance variable is an array
+  of User objects, populated in the index action of the UsersController.
+-->
+
+<h1><%= pluralize(@users.size, "User") %></h1>
+<!--
+  The <h1> tag displays the title of the page, indicating the number
+  of users present. The `pluralize` helper method is used here to
+  ensure proper pluralization based on the number of users.
+
+  Example Output:
+  - If there are 0 users: "0 Users"
+  - If there is 1 user: "1 User"
+  - If there are 2 users: "2 Users"
+  - The pluralization ensures the text is grammatically correct,
+  improving the user experience.
+-->
+
+<ul class="users">
+  <!--
+    The <ul> element creates an unordered list to contain each user.
+    The class "users" can be styled with CSS to differentiate this
+    section visually or for layout purposes.
+  -->
+
+  <% @users.each do |user| %>
+  <!--
+    The `each` method iterates over the @users array. For each user
+    object in the array, a block of code is executed.
+
+    The block variable `user` represents the current User object
+    being iterated over. This allows us to access user attributes
+    such as `name` and `created_at` within the block.
+  -->
+
+    <li>
+    <!--
+      Each user is wrapped in an <li> element, which represents
+      a single item in the list. This structure helps with semantic
+      HTML and improves accessibility for screen readers.
+    -->
+
+      <%= link_to user.name, user %>
+      <!--
+        The `link_to` helper method creates a hyperlink for the user.
+        It takes two arguments:
+        - `user.name`: This is the text displayed for the link,
+          which is the user's name.
+        - `user`: This is the path that the link directs to,
+          typically the `show` action for the User, generated based
+          on Rails' routing conventions.
+
+        Example Output:
+        If the user's name is "John Doe" and their profile URL is 
+        `/users/1`, the output will be:
+        <a href="/users/1">John Doe</a>
+      -->
+
+      created
+      <!--
+        The static text "created" is included to provide context
+        to the user about what follows. This indicates that the
+        next information relates to when the user account was created.
+      -->
+
+      <%= time_ago_in_words(user.created_at) %> ago
+      <!--
+        The `time_ago_in_words` helper method is used to format
+        the `created_at` timestamp of the user into a human-readable
+        format, indicating how long ago the user was created.
+        
+        Example Output:
+        If a user was created 5 minutes ago, this would output:
+        "5 minutes ago".
+
+        This method enhances user experience by providing a more
+        intuitive understanding of time rather than displaying raw
+        timestamps.
+      -->
+    </li>
+    <!--
+      Closing tag for the <li> element. Each user is presented as
+      a list item, helping to structure the user list clearly.
+    -->
+  <% end %>
+  <!--
+    Closing tag for the each loop. After this point, all users
+    in the @users array have been processed and displayed.
+  -->
+</ul>
+<!--
+  Closing tag for the <ul> element. This concludes the list of users
+  displayed on the page.
+-->
