@@ -1,64 +1,125 @@
-<%# 
-  This template iterates over the @movies collection and displays each movie's details.
-  It is typically used in the movies index view, located at 'app/views/movies/index.html.erb'.
-  The view presents a list of movies, each with its image, title, total gross, average stars, and a truncated description.
-  At the end, there is a link for administrators to add a new movie.
-%>
+<!--
+  This view template is responsible for rendering a list of movies in an index format.
+  It utilizes embedded Ruby (ERB) to dynamically generate the HTML content based on the 
+  collection of movies provided by the MoviesController. Each movie is displayed with 
+  relevant information, including an image, title, total gross, average rating, and a 
+  truncated description.
+
+  The template assumes that the @movies instance variable is set in the corresponding 
+  controller action, containing an array of Movie objects that are to be displayed in 
+  the index view.
+
+  The overall structure of the view consists of a loop iterating through the @movies 
+  collection and conditionally displaying additional options for users with admin privileges.
+-->
 
 <% @movies.each do |movie| %>
+  <!-- 
+    This loop iterates over each movie object in the @movies collection.
+    - For each iteration, a new section is created to encapsulate the details of 
+      a single movie, allowing for clean and organized presentation of data.
+    - The 'movie' variable represents the current movie object being processed in 
+      the loop.
+  -->
+
   <section class="movie">
+    <!-- 
+      This section element serves as a container for each individual movie's details.
+      - The class "movie" can be styled via CSS to enhance the visual appearance of 
+        the movie listings.
+    -->
+
     <div class="image">
-      <%# 
-        Display the movie's image.
-        - Uses 'image_tag' helper to generate an HTML <img> tag.
-        - 'movie.image_file_name' provides the filename of the movie's image.
-        - Assumes the image is stored in 'app/assets/images/' or accessible via a URL.
-      %>
+      <!-- 
+        This div contains the movie's image, providing a visual representation of 
+        the film to engage users.
+      -->
       <%= image_tag movie.image_file_name %>
+      <!-- 
+        This line renders the movie's image using the 'image_tag' helper.
+        - 'movie.image_file_name' retrieves the filename of the movie's image 
+          stored in the database.
+        - The image is displayed in its original size, and appropriate styles 
+          can be applied via CSS for consistent layout across the movie listings.
+      -->
     </div>
+
     <div class="summary">
+      <!-- 
+        This div contains the summary information for the movie, including the title,
+        total gross, average rating, and a brief description.
+        - This organized layout enhances readability and allows users to quickly 
+          gather key information about each movie.
+      -->
+
       <h2>
-        <%# 
-          Display the movie title as a link to the movie's show page.
-          - 'link_to' creates a hyperlink with the movie's title as the link text.
-          - Passing 'movie' as the URL generates the path to the movie's show action.
-        %>
         <%= link_to(movie.title, movie) %>
+        <!-- 
+          This heading (h2) displays the title of the movie as a clickable link.
+          - 'link_to(movie.title, movie)' generates a hyperlink that directs users 
+            to the show view for the selected movie, providing a seamless navigation 
+            experience.
+          - Using an h2 tag for the title maintains proper semantic structure for SEO 
+            and accessibility.
+        -->
       </h2>
+
       <h3>
-        <%# 
-          Display the formatted total gross of the movie.
-          - 'total_gross(movie)' is a helper method that formats the total gross for display.
-          - It may display 'Flop!' if the movie is considered a flop based on business logic.
-        %>
         <%= total_gross(movie) %>
+        <!-- 
+          This heading (h3) displays the total gross revenue of the movie.
+          - 'total_gross(movie)' is a helper method that retrieves and formats 
+            the total earnings of the movie, providing context for its financial success.
+          - The use of h3 helps to visually differentiate this information from the 
+            movie title, indicating its importance as a secondary detail.
+        -->
       </h3>
+
       <span class="stars">
-        <%# 
-          Display the average star rating of the movie.
-          - 'average_stars(movie)' is a helper method that calculates and formats the average rating.
-          - Shows 'No reviews' if there are no reviews for the movie.
-        %>
         <%= average_stars(movie) %>
+        <!-- 
+          This span displays the average rating stars for the movie.
+          - 'average_stars(movie)' is a helper method that returns an HTML representation 
+            of the movie's average rating as stars, helping users quickly assess the 
+            quality of the film.
+          - The use of a span allows for inline styling and placement within the summary.
+        -->
       </span>
+
       <p>
-        <%# 
-          Display a truncated version of the movie's description.
-          - Uses 'truncate' helper to shorten the description to 150 characters.
-          - 'separator: ' '' ensures truncation occurs at word boundaries to avoid cutting words in half.
-        %>
         <%= truncate(movie.description, length: 150, separator: ' ') %>
+        <!-- 
+          This paragraph displays a truncated version of the movie's description.
+          - 'truncate(movie.description, length: 150, separator: ' ')' generates a 
+            shortened version of the description, ensuring that only the first 150 
+            characters are shown, followed by an ellipsis if the content is longer.
+          - This feature improves the overall readability of the index view by 
+            preventing overly long text from disrupting the layout.
+        -->
       </p>
     </div>
   </section>
 <% end %>
 
-<section class="admin">
-  <%# 
-    Link to add a new movie.
-    - 'link_to' creates a hyperlink styled as a button.
-    - 'new_movie_path' generates the URL for the new movie form.
-    - 'class: "button"' applies a CSS class for styling the link as a button.
-  %>
-  <%= link_to "Add New Movie", new_movie_path, class: "button" %>
-</section>
+<% if current_user_admin? %>
+  <!-- 
+    This conditional block checks if the current user has admin privileges. 
+    If true, it displays an option for admins to add a new movie to the database.
+  -->
+
+  <section class="admin">
+    <!-- 
+      This section is designated for administrative actions related to movies.
+      - It is visually separated from the main movie listings to avoid confusion 
+        for standard users.
+    -->
+    <%= link_to "Add New Movie", new_movie_path, class: "button" %>
+    <!-- 
+      This link allows admins to navigate to the form for adding a new movie.
+      - The text "Add New Movie" serves as a clear call to action for administrators.
+      - 'new_movie_path' generates the appropriate URL for the new movie form 
+        in the MoviesController, facilitating the addition of new entries.
+      - The "button" class is applied for consistent styling with other action buttons.
+    -->
+  </section>
+<% end %>

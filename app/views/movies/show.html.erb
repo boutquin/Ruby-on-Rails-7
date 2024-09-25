@@ -1,122 +1,188 @@
 <!--
-  This is the 'show' view template for displaying the details of a single movie.
-  It is located at 'app/views/movies/show.html.erb'.
-  The view presents detailed information about the movie, including its image, title,
-  release year, rating, reviews, description, and additional attributes.
-  It also provides options for users to write a review and administrative options to edit or delete the movie.
+  This view template is responsible for displaying the details of a specific movie.
+  It utilizes embedded Ruby (ERB) to dynamically generate the HTML content based on
+  the data retrieved from the MoviesController. The information shown includes the movie's
+  image, title, release year, rating, reviews, description, director, duration, and
+  total gross revenue. The layout is designed to present movie details in a user-friendly 
+  manner, enhancing the overall user experience.
+
+  The template assumes that a @movie instance variable is set in the corresponding
+  controller action, containing an instance of the Movie model with all necessary attributes
+  and associations.
+
+  The overall structure is divided into two main sections: the movie details and,
+  conditionally, an admin section that appears only for users with admin privileges.
 -->
 
 <section class="movie-details">
-  <!--
-    Display the movie's image.
-    - The 'image_tag' helper generates an HTML <img> tag for the given image file.
-    - '@movie.image_file_name' provides the filename of the movie's image.
-    - This assumes that the image file exists in the 'app/assets/images' directory.
-    - If the image file does not exist, a broken image icon may appear unless handled appropriately.
+  <!-- 
+    This section element serves as a container for the movie details, 
+    applying a class "movie-details" for styling purposes. It enhances 
+    semantic structure and makes it clear that this section contains 
+    relevant information about a specific movie.
   -->
+
   <div class="image">
+    <!-- 
+      This div contains the movie's image, providing a visual representation 
+      of the film to engage users and enhance their viewing experience.
+    -->
     <%= image_tag @movie.image_file_name %>
+    <!-- 
+      This line renders the movie's image using the 'image_tag' helper.
+      - @movie.image_file_name retrieves the filename of the movie's image 
+        stored in the database.
+      - The image is displayed in its original size, and appropriate styles 
+        can be applied via CSS to maintain layout consistency.
+    -->
   </div>
 
   <div class="details">
-    <!--
-      Display the movie title as a heading.
-      - '<h1>' is a level 1 heading, indicating the main title of the page.
-      - '@movie.title' retrieves the title of the movie from the database.
+    <!-- 
+      This div contains the textual details of the movie. 
+      - It provides an organized layout for the movie title, year, rating, reviews, 
+        description, and additional information in a structured format.
     -->
-    <h1><%= @movie.title %></h1>
 
-    <!--
-      Display the release year and rating of the movie.
-      - '<h2>' is a level 2 heading for subtitle information.
-      - 'year_of(@movie)' is a helper method that returns the release year or 'N/A' if not available.
-      - '&bull;' is an HTML entity representing a bullet character (•), used as a separator between the year and rating.
-      - '@movie.rating' displays the movie's rating (e.g., 'PG-13').
+    <h1><%= @movie.title %></h1>
+    <!-- 
+      This heading (h1) displays the movie title prominently.
+      - @movie.title retrieves the title of the movie from the database,
+        making it clear to the user which movie's details they are viewing.
+      - Using an h1 tag indicates the primary focus of the page and improves SEO.
     -->
+
     <h2>
       <%= year_of(@movie) %> &bull; <%= @movie.rating %>
+      <!-- 
+        This heading (h2) displays the year of release and the movie's rating.
+        - 'year_of(@movie)' is a helper method that retrieves and formats 
+          the release year of the movie, enhancing clarity for the user.
+        - @movie.rating provides the movie's rating (e.g., PG-13, R).
+        - The use of "&bull;" (bullet) visually separates the year from the rating, 
+          improving readability.
+      -->
     </h2>
 
-    <!--
-      Display the average star rating and a link to the reviews for the movie.
-      - '@movie.average_stars' calls a method that calculates the average rating from all reviews associated with the movie.
-        - Returns a float representing the average stars, or 0.0 if there are no reviews.
-        - The average rating is formatted and displayed to the user, e.g., "Average Rating: 4.5 stars".
-      - '@movie.reviews.size' returns the number of reviews associated with the movie.
-        - 'pluralize(@movie.reviews.size, "review")' adjusts "review" to "reviews" when appropriate.
-        - 'movie_reviews_path(@movie)' generates the URL to the movie's reviews index page.
-        - This section allows users to see the movie's average rating and navigate to the reviews page.
-    -->
     <div class="reviews">
-      <!-- Display the average star rating, rounded to one decimal place -->
-      <%= "Average Rating: #{@movie.average_stars.round(1)} stars" %>
-      <!-- Link to the movie's reviews page with the correct pluralization of 'review' -->
-      <%= link_to pluralize(@movie.reviews.size, "review"), movie_reviews_path(@movie) %>
+      <!-- 
+        This div displays the average rating stars and the number of reviews 
+        associated with the movie.
+      -->
+      <%= average_stars(@movie) %>
+      <!-- 
+        This line calls the 'average_stars' helper method, which returns 
+        an HTML representation of the movie's average rating as stars.
+        - This visual element helps users quickly assess the quality of the movie 
+          based on collective ratings from reviews.
+      -->
+
+      <%= link_to pluralize(@movie.reviews.size, "review"),
+            movie_reviews_path(@movie) %>
+      <!-- 
+        This line creates a link that displays the number of reviews for the movie.
+        - 'pluralize(@movie.reviews.size, "review")' dynamically generates 
+          the correct word form (singular or plural) based on the number of reviews.
+        - 'movie_reviews_path(@movie)' generates the URL for the movie's reviews page,
+          allowing users to view all reviews for this specific film.
+      -->
     </div>
 
-    <!--
-      Display the movie's description.
-      - The '<p>' tag represents a paragraph containing the full description of the movie.
-      - '@movie.description' retrieves the description text from the movie object.
-    -->
     <p>
       <%= @movie.description %>
+      <!-- 
+        This paragraph displays the movie's description.
+        - @movie.description retrieves a summary or overview of the movie,
+          giving potential viewers insight into the film's plot or themes.
+        - This section helps inform user decisions regarding watching the movie.
+      -->
     </p>
 
-    <!--
-      Display additional details about the movie in a table format.
-      - The '<table>' element creates a table to organize information in rows and columns.
-      - Each '<tr>' represents a table row containing a label and its corresponding value.
-      - '<th>' elements define header cells (labels), and '<td>' elements define data cells (values).
-    -->
     <table>
+      <!-- 
+        This table organizes additional details about the movie in a structured 
+        format, improving readability and allowing users to find information quickly.
+      -->
       <tr>
         <th>Director:</th>
         <td><%= @movie.director %></td>
+        <!-- 
+          This row displays the director of the movie.
+          - The <th> element (table header) specifies that "Director:" is a label for 
+            the information presented in the <td> (table data) element.
+          - @movie.director retrieves the director's name from the movie object.
+        -->
       </tr>
       <tr>
         <th>Duration:</th>
         <td><%= @movie.duration %></td>
+        <!-- 
+          This row displays the movie's duration.
+          - The <th> element identifies this row's data as related to the movie's 
+            length.
+          - @movie.duration retrieves the total runtime of the movie, allowing 
+            users to plan their viewing accordingly.
+        -->
       </tr>
       <tr>
         <th>Total Gross:</th>
-        <!--
-          Use the 'total_gross' helper method to display the total gross in a formatted way.
-          - If the movie is a flop, it displays 'Flop!'.
-          - Otherwise, it formats the total gross as currency.
-        -->
         <td><%= total_gross(@movie) %></td>
+        <!-- 
+          This row displays the total gross revenue of the movie.
+          - The <th> element indicates this data point, which may interest users 
+            regarding the film's financial success.
+          - The 'total_gross(@movie)' helper method retrieves and formats 
+            the total earnings, providing context for the movie's impact in the industry.
+        -->
       </tr>
     </table>
 
-    <!--
-      Link to write a new review for the movie.
-      - 'link_to "Write Review", new_movie_review_path(@movie)' creates a hyperlink to the new review form for the movie.
-      - 'class: "review"' applies a CSS class for styling the link.
-      - This encourages users to contribute by writing their own reviews.
+    <%= link_to "Write Review", new_movie_review_path(@movie),
+          class: "review" %>
+    <!-- 
+      This link allows users to navigate to the review creation form for the movie.
+      - The text "Write Review" serves as a call to action, encouraging users to 
+        contribute their opinions.
+      - 'new_movie_review_path(@movie)' generates the URL for the review form, 
+        associating the new review with the specific movie.
+      - The "review" class can be styled for visual emphasis, improving user engagement.
     -->
-    <%= link_to "Write Review", new_movie_review_path(@movie), class: "review" %>
   </div>
 </section>
 
-<!--
-  Administrative options to edit or delete the movie.
-  - These links are typically shown to users with the appropriate permissions (e.g., admins).
+<% if current_user_admin? %>
+<!-- 
+  This conditional block checks if the current user has admin privileges. 
+  If true, it displays the administrative options for editing and deleting the movie.
 -->
-<section class="admin">
-  <!--
-    Link to edit the movie.
-    - 'link_to "Edit", edit_movie_path(@movie), class: "button"' creates a link styled as a button to the edit page for the movie.
-  -->
-  <%= link_to "Edit", edit_movie_path(@movie), class: "button" %>
 
-  <!--
-    Link to delete the movie with a confirmation dialog.
-    - 'link_to "Delete", movie_path(@movie), ...' creates a link that sends a DELETE HTTP request.
-    - 'data: { turbo_method: :delete }' specifies that the link should use the DELETE method.
-    - 'data: { turbo_confirm: "Deletion cannot be undone. Are you sure?" }' prompts the user to confirm the action.
-    - This requires Turbo or Rails UJS to handle the method and confirmation data attributes.
-  -->
-  <%= link_to "Delete", movie_path(@movie), class: "button",
-         data: { turbo_method: :delete, turbo_confirm: "Deletion cannot be undone. Are you sure?" } %>
-</section>
+  <section class="admin">
+    <!-- 
+      This section is designated for administrative actions related to the movie.
+      - It is separated from the main movie details to avoid clutter and confusion 
+        for standard users.
+    -->
+    <%= link_to "Edit", edit_movie_path(@movie), class: "button" %>
+    <!-- 
+      This link allows admins to navigate to the edit form for the movie.
+      - The text "Edit" clearly indicates the purpose of the link.
+      - 'edit_movie_path(@movie)' generates the appropriate URL for the edit action 
+        in the MoviesController, allowing the admin to modify movie details.
+      - The "button" class is applied for consistent styling with other action buttons.
+    -->
+
+    <%= link_to "Delete", movie_path(@movie), class: "button",
+         data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+    <!-- 
+      This link provides an option for admins to delete the movie from the database.
+      - The text "Delete" serves as a clear warning of the action to be taken.
+      - 'movie_path(@movie)' generates the URL for the destroy action in the 
+        MoviesController, which will permanently remove the movie.
+      - The "button" class is styled to match the edit link.
+      - The data attributes specify that this link will trigger a DELETE request 
+        using Turbo, enhancing the user experience with confirmation before deletion.
+      - 'turbo_confirm: "Are you sure?"' prompts the user for confirmation,
+        preventing accidental deletions.
+    -->
+  </section>
+<% end %>

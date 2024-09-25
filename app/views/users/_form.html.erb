@@ -1,13 +1,13 @@
 <%= form_with(model: user) do |form| %>
-  <!-- ============================================================================
-  # User Form Partial
-  # ============================================================================
-  # This partial view renders a form for creating or editing a user account.
-  # It utilizes the form_with helper to build a form that is automatically tied
-  # to the specified model (user). The form adapts based on whether the user
-  # object is a new record or an existing one.
-  # ============================================================================
-  -->
+<!-- ============================================================================
+# User Form Partial
+# ============================================================================
+# This partial view renders a form for creating or editing a user account.
+# It utilizes the form_with helper to build a form that is automatically tied
+# to the specified model (user). The form adapts based on whether the user
+# object is a new record or an existing one.
+# ============================================================================
+-->
 
   <!-- Render error messages if there are any validation issues -->
   <%= render "shared/errors", object: user %>
@@ -21,11 +21,35 @@
   <!-- This label is associated with the name input field. It provides context
        for the user about what is expected in this input. -->
 
-  <%= form.text_field :name, autofocus: true %>
+  <% if user.new_record? %>
+    <!-- Check if the user is a new record, allowing for user creation -->
+    <%= form.label :username %>
+    <!-- This label is associated with the username input field. It helps the user
+         understand that they need to provide a unique identifier for their account. -->
+
+    <%= form.text_field :username, placeholder: "Alphanumeric characters only!" %>
+    <!-- This text field allows new users to input their username. The `:username`
+         symbol specifies which attribute of the user model is being set. The 
+         `placeholder` attribute provides a hint to the user about the expected 
+         format for their username, encouraging the use of alphanumeric characters only. -->
+  <% else %>
+    <%= form.text_field :username, readonly: true %>
+    <!-- For existing users, the username field is rendered as read-only to 
+         prevent any changes. This ensures that the username remains constant, 
+         which is typically necessary for account identification. -->
+  <% end %>
+
+  <%= form.label :name %>
+  <!-- This label prompts the user to enter their full name, which is an essential 
+       piece of information for user accounts. -->
+
+  <%= form.text_field :name, autofocus: !user.new_record? %>
   <!-- This text field allows the user to input their name. The `:name` symbol
        specifies which attribute of the user model is being set. The `autofocus: true`
        option ensures that this field is automatically focused when the form is loaded,
-       improving user experience by allowing immediate typing. -->
+       improving user experience by allowing immediate typing. The `!user.new_record?`
+       expression ensures that the autofocus only applies if the user is editing an 
+       existing account, providing a smoother workflow. -->
 
   <!-- User Email Field -->
   <%= form.label :email %>
@@ -35,7 +59,8 @@
   <%= form.email_field :email %>
   <!-- This email field allows users to enter their email address. The `email_field`
        helper provides basic validation for email format by using the HTML5 email
-       input type, which can help prevent user input errors. -->
+       input type, which can help prevent user input errors. This ensures that the 
+       email entered is in a valid format before form submission. -->
 
   <!-- Password Field -->
   <%= form.label :password %>
@@ -45,29 +70,38 @@
   <%= form.password_field :password %>
   <!-- This password field allows users to enter a password securely. The text
        input is masked to protect sensitive information from being visible while
-       typing. -->
+       typing. This is crucial for maintaining user security and privacy. -->
 
   <!-- Password Confirmation Field -->
   <%= form.label :password_confirmation, "Confirm Password" %>
   <!-- Label for the password confirmation field, clarifying that the user must
        re-enter their password for verification. The label text is customized to
-       "Confirm Password" for better clarity. -->
+       "Confirm Password" for better clarity and usability. -->
 
   <%= form.password_field :password_confirmation %>
   <!-- This field enables users to confirm their password by re-entering it. It
        serves as a check against typos and ensures the user knows their chosen
-       password before submitting the form. -->
+       password before submitting the form. This step is critical for preventing
+       user errors during account creation. -->
 
   <!-- Submit Button -->
   <% if user.new_record? %>
     <!-- Check if the user is a new record -->
     <%= form.submit "Create Account" %>
     <!-- If the user is new, render a submit button with the text "Create Account".
-         This button submits the form, creating a new user in the database. -->
+         This button submits the form, creating a new user in the database. This 
+         action is crucial for user account creation and is a primary call to action
+         on this form. -->
   <% else %>
     <!-- If the user is not a new record (i.e., they are editing an existing account) -->
     <%= form.submit "Update Account" %>
     <!-- Render a submit button with the text "Update Account" for existing users.
-         This button updates the user's information in the database. -->
+         This button updates the user's information in the database, allowing users
+         to modify their account details seamlessly. This provides flexibility for 
+         the user to keep their information up to date. -->
   <% end %>
 <% end %>
+<!-- End of the form_with block. This closing tag ensures proper form structure,
+     making it a valid HTML form for user input. The entire form is contextually tied 
+     to the `user` model, allowing for both creation and editing of user accounts 
+     based on the provided model instance. -->

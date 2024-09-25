@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
   # It memoizes the result, meaning that the user will only be fetched from the database
   # once per request, improving performance by avoiding multiple database calls.
   def current_user
-    @current_user ||= User.find_by id: session[:user_id] if session[:user_id]
+    @current_user ||= User.find session[:user_id] if session[:user_id]
   end
 
   # Make the current_user method available in views as a helper method.

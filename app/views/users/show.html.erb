@@ -24,35 +24,39 @@
   -->
 
   <!-- Display the user's name as the main heading (h1) -->
-  <h1><%= @user.name %></h1>
+  <% if current_user_admin? %>
+    <h1><%= @user.name %> <small><small>(admin)</small></small></h1>
+  <% else %>
+    <h1><%= @user.name %></h1>
+  <% end %>
   <!-- This line renders the name of the user as an H1 heading.
        The name is pulled from the @user instance variable. -->
 
-<!-- ============================================================================
-# User Membership Date Display
-# ============================================================================
-# This paragraph element displays information about the user's membership date,
-# specifically when the user account was created.
-#
-# The <strong> tag is used to emphasize the label "Member Since", making it bold
-# to indicate that it is important information. This improves readability and
-# helps users quickly identify the membership status.
-#
-# The <%= %> embedded Ruby code executes the following:
-# - @user.created_at retrieves the timestamp of when the user account was created.
-# - .strftime("%B %Y") formats the date into a more human-readable form, where
-#   "%B" represents the full month name (e.g., "January") and "%Y" represents
-#   the four-digit year (e.g., "2024").
-# 
-# As a result, this code snippet will output something like:
-# "Member Since: January 2024"
-# This provides the user with a clear understanding of their membership duration.
-# ============================================================================
--->
-<p>
-  <strong>Member Since:</strong> 
-  <%= @user.created_at.strftime("%B %Y") %>
-</p>
+  <!-- ============================================================================
+  # User Membership Date Display
+  # ============================================================================
+  # This paragraph element displays information about the user's membership date,
+  # specifically when the user account was created.
+  #
+  # The <strong> tag is used to emphasize the label "Member Since", making it bold
+  # to indicate that it is important information. This improves readability and
+  # helps users quickly identify the membership status.
+  #
+  # The <%= %> embedded Ruby code executes the following:
+  # - @user.created_at retrieves the timestamp of when the user account was created.
+  # - .strftime("%B %Y") formats the date into a more human-readable form, where
+  #   "%B" represents the full month name (e.g., "January") and "%Y" represents
+  #   the four-digit year (e.g., "2024").
+  #
+  # As a result, this code snippet will output something like:
+  # "Member Since: January 2024"
+  # This provides the user with a clear understanding of their membership duration.
+  # ============================================================================
+  -->
+  <p>
+    <strong>Member Since:</strong>
+    <%= @user.created_at.strftime("%B %Y") %>
+  </p>
 
   <!-- Display the user's email with a mailto link -->
   <h2><%= mail_to(@user.email) %></h2>
@@ -64,40 +68,57 @@
   <!-- ============================================================================
   # Conditional Actions Section
   # ============================================================================
-  # This conditional block checks if the currently signed-in user is the same
-  # as the user whose profile is being displayed. If so, it shows additional
-  # action links for editing or deleting the account. This ensures that users
-  # can only modify their own accounts, enhancing security and privacy.
+  # This section determines which action links (Edit or Delete) to display based
+  # on the relationship between the currently signed-in user and the user whose
+  # profile is being viewed. The logic ensures that users can only modify their
+  # own accounts, while allowing administrators to manage all user accounts.
+  # This approach enhances both security and user privacy by restricting access
+  # to sensitive actions.
   # ============================================================================
-  -->
 
   <% if current_user?(@user) %>
-    <!-- Check if the current user is the same as the user being viewed -->
+    <!-- 
+    This block checks if the currently signed-in user is the same as the user 
+    being viewed. The `current_user?` method is expected to return true if the 
+    two users match. If they do, the following actions are available:
+    
+    - **Edit Account**: Users can edit their profile details. 
+    -->
     
     <div class="actions">
-      <!-- Action buttons for the user account -->
-      <!-- The following links provide functionality for the user to edit
-           their account details or delete their account. These actions
-           are wrapped in a div for styling purposes. -->
-
       <!-- Link to the Edit Account page -->
       <%= link_to "Edit Account", edit_user_path(@user),
                   class: "button edit" %>
-      <!-- This link redirects to the edit user form. The edit_user_path
-           helper generates the appropriate URL for editing the user.
-           The "button edit" class can be styled to appear as a button. -->
-
-      <!-- Link to Delete Account -->
-      <%= link_to 'Delete Account', @user, class: "button delete",
-          data: { turbo_method: :delete, turbo_confirm: "Permanently delete your account!?" } %>
-      <!-- This link triggers the deletion of the user account. 
-           It uses the `@user` instance variable to generate the URL.
-           The data attributes add Turbo functionality:
-           - turbo_method: :delete specifies that this link will perform
-             a DELETE request when clicked, as opposed to the default GET request.
-           - turbo_confirm prompts the user with a confirmation dialog before
-             proceeding with the deletion, helping prevent accidental deletions. 
-           The "button delete" class can also be styled for consistency. -->
+      <!-- This link directs the user to the edit form for their account,
+          allowing them to update their information. The helper method 
+          `edit_user_path(@user)` generates the URL for this action, and the 
+          class "button edit" can be styled to look like a button. -->
     </div>
+
+  <% else %>
+    <!-- 
+    This block executes if the currently signed-in user is NOT the same as the 
+    user being viewed. It further checks if the current user has admin privileges.
+    If the user is an admin, the following action is displayed:
+    
+    - **Delete Account**: Admins can delete any user account. 
+    -->
+    
+    <% if current_user_admin? %>
+      <div class="actions">
+        <!-- Link to Delete Account -->
+        <%= link_to 'Delete Account', @user, class: "button delete",
+            data: { turbo_method: :delete, turbo_confirm: "Permanently delete your account!?" } %>
+        <!-- This link enables an admin to delete the user account.
+            The `@user` instance variable is used to generate the URL for deletion.
+            It employs Turbo functionality:
+            - **turbo_method: :delete** indicates that clicking this link will
+              perform a DELETE HTTP request, as opposed to the default GET.
+            - **turbo_confirm** prompts the admin with a confirmation dialog,
+              ensuring they intend to delete the account, thus reducing the risk 
+              of accidental deletions. The "button delete" class provides a 
+              visual cue that this is a destructive action. -->
+      </div>
+    <% end %>
   <% end %>
 </section>

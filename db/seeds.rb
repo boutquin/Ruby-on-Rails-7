@@ -174,3 +174,11 @@ Movie.create!([
     image_file_name: "wonder-woman.png"
   }
 ])
+
+User.create!(
+  name: "Pierre G. Boutquin",
+  username: "DragonLore",
+  email: "Pierre@Boutquin.com",
+  password: "secret",
+  admin: true
+)

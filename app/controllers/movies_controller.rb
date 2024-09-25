@@ -1,80 +1,116 @@
-# The MoviesController handles HTTP requests related to movie resources.
-# It provides actions for listing, displaying, creating, updating, and deleting movies.
-# This controller follows RESTful conventions, mapping HTTP verbs to controller actions.
+# The MoviesController class is responsible for managing all HTTP requests related to movie resources.
+# It provides a set of actions to list, display, create, update, and delete movie records.
+# This controller adheres to RESTful conventions, mapping HTTP verbs (GET, POST, PATCH, DELETE) to their corresponding controller actions.
 class MoviesController < ApplicationController
+  # ============================================================================
+  # Before Actions
+  # ============================================================================
+  # The before_action callbacks are executed before the specified actions in the controller.
+  # These are used to enforce authentication and authorization for various actions.
+
+  # Require users to be signed in for all actions except 'index' (listing movies) and 'show' (displaying a single movie).
+  before_action :require_signin, except: [ :index, :show ]
+
+  # Ensure that the current user has admin privileges for all actions except 'index' and 'show'.
+  before_action :require_admin, except: [ :index, :show ]
+
   # ============================================================================
   # Actions
   # ============================================================================
 
-  # GET /movies
-  # The index action retrieves all released movies from the database
-  # and assigns them to an instance variable for use in the index view.
-  # This action is used to display a list of movies to the user.
+  # ============================================================================
+  # Index Action
+  # ============================================================================
+  # This action retrieves all released movies from the database and assigns them
+  # to the instance variable @movies, which is then available for use in the index view.
+  #
+  # This action is typically used to display a list of all available movies to users.
+  #
+  # Returns:
+  # - @movies: An ActiveRecord collection of Movie objects representing all released movies.
   def index
-    # Fetch all movies that have been released.
-    # The 'released' scope is defined in the Movie model and returns movies where 'released_on' is in the past.
-    # The movies are ordered by the 'released_on' date in descending order (most recent first).
     @movies = Movie.released
   end
 
-  # GET /movies/:id
-  # The show action retrieves a single movie based on the ID parameter
-  # and assigns it to an instance variable for use in the show view.
+  # ============================================================================
+  # Show Action
+  # ============================================================================
+  # This action retrieves a single movie based on the ID parameter provided in the URL
+  # and assigns it to the instance variable @movie for use in the show view.
+  #
   # This action displays detailed information about a specific movie.
+  #
+  # Raises:
+  # - ActiveRecord::RecordNotFound if no movie is found with the given ID.
+  #
+  # Returns:
+  # - @movie: An instance of Movie representing the movie with the specified ID.
   def show
-    # Find the movie by its ID, which is obtained from the URL parameters.
-    # 'params[:id]' retrieves the :id parameter from the request.
-    # 'Movie.find' raises an ActiveRecord::RecordNotFound exception if the movie is not found,
-    # which by default renders a 404 error page.
     @movie = Movie.find(params[:id])
   end
 
-  # GET /movies/new
-  # The new action initializes a new movie object and assigns it to an instance variable.
-  # This is used in the 'new' view to render a form for creating a new movie.
+  # ============================================================================
+  # New Action
+  # ============================================================================
+  # This action initializes a new movie object and assigns it to @movie.
+  # This object is used in the 'new' view to render a form for creating a new movie.
+  #
+  # Returns:
+  # - @movie: A new instance of Movie, which is empty and ready for input.
   def new
-    # Instantiate a new, unsaved Movie object.
-    # This object is used by the form helper methods in the view to generate the form fields.
     @movie = Movie.new
   end
 
-  # POST /movies
-  # The create action attempts to create a new movie record with the parameters submitted from the 'new' form.
-  # If the movie is saved successfully, it redirects to the movie's show page with a success message.
-  # If not, it re-renders the 'new' form with error messages.
+  # ============================================================================
+  # Create Action
+  # ============================================================================
+  # This action attempts to create a new movie record with the parameters submitted
+  # from the 'new' form. If the movie is saved successfully, it redirects to the
+  # movie's show page with a success message. If not, it re-renders the 'new' form
+  # with error messages for user feedback.
+  #
+  # Returns:
+  # - Redirects to the movie's show page if successful.
+  # - Renders the 'new' template with validation errors if unsuccessful.
   def create
-    # Instantiate a new Movie object with the permitted parameters from the form.
     @movie = Movie.new(movie_params)
 
     # Attempt to save the new movie to the database.
     if @movie.save
       # If the save is successful, redirect to the show action (movie's detail page).
-      # The 'notice' option sets a flash message that will be displayed to the user on the redirected page.
       redirect_to @movie, notice: "Movie created successfully."
     else
       # If the save fails due to validation errors, re-render the 'new' template.
-      # The 'status: :unprocessable_entity' sets the HTTP response status code to 422,
-      # indicating that the server understands the content type and syntax of the request but was unable to process the contained instructions.
       render :new, status: :unprocessable_entity
     end
   end
 
-  # GET /movies/:id/edit
-  # The edit action retrieves the movie to be edited based on the ID parameter
-  # and assigns it to an instance variable for use in the 'edit' view.
+  # ============================================================================
+  # Edit Action
+  # ============================================================================
+  # This action retrieves the movie to be edited based on the ID parameter
+  # and assigns it to the instance variable @movie for use in the 'edit' view.
+  #
   # This action is used to display a form for editing an existing movie.
+  #
+  # Returns:
+  # - @movie: An instance of Movie representing the movie being edited.
   def edit
-    # Find the movie by its ID.
-    # This movie object will be used to populate the form fields in the 'edit' view.
     @movie = Movie.find(params[:id])
   end
 
-  # PATCH/PUT /movies/:id
-  # The update action updates an existing movie record with the parameters submitted from the 'edit' form.
-  # If the update is successful, it redirects to the movie's show page with a success message.
-  # If not, it re-renders the 'edit' form with error messages.
+  # ============================================================================
+  # Update Action
+  # ============================================================================
+  # This action updates an existing movie record with the parameters submitted
+  # from the 'edit' form. If the update is successful, it redirects to the movie's
+  # show page with a success message. If not, it re-renders the 'edit' form with
+  # error messages.
+  #
+  # Returns:
+  # - Redirects to the movie's show page if the update is successful.
+  # - Renders the 'edit' template with validation errors if unsuccessful.
   def update
-    # Find the movie by its ID.
     @movie = Movie.find(params[:id])
 
     # Attempt to update the movie with the permitted parameters.
@@ -83,27 +119,25 @@ class MoviesController < ApplicationController
       redirect_to @movie, notice: "Movie updated successfully."
     else
       # If the update fails due to validation errors, re-render the 'edit' template.
-      # The 'status: :unprocessable_entity' sets the HTTP response status code to 422.
       render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /movies/:id
-  # The destroy action deletes an existing movie record from the database.
-  # After deletion, it redirects to the movies index page with a success message.
+  # ============================================================================
+  # Destroy Action
+  # ============================================================================
+  # This action deletes an existing movie record from the database. After deletion,
+  # it redirects to the movies index page with a success message.
+  #
+  # Returns:
+  # - Redirects to the movies index page after deletion.
   def destroy
-    # Find the movie by its ID.
     @movie = Movie.find(params[:id])
-
-    # Delete the movie record from the database.
     @movie.destroy
 
-    # Redirect to the movies index page.
-    # The 'status: :see_other' sets the HTTP response status code to 303,
-    # indicating that the resource has been replaced and the client should perform a GET request to the new URL.
-    # Set a flash notice to inform the user that the movie was deleted successfully.
+    # Redirect to the movies index page with a success alert.
     redirect_to movies_url, status: :see_other,
-        alert: "Account successfully deleted!"
+        alert: "Movie successfully deleted!"
   end
 
   # ============================================================================
@@ -114,13 +148,25 @@ class MoviesController < ApplicationController
   # Private methods are internal helper methods and cannot be accessed externally (e.g., via a URL).
   private
 
-  # The 'movie_params' method uses strong parameters to whitelist attributes that can be mass-assigned.
-  # This is a security feature to prevent mass assignment vulnerabilities,
-  # where a malicious user could submit extra parameters to manipulate model attributes not intended for editing.
+  # ============================================================================
+  # Movie Parameters Method
+  # ============================================================================
+  # This method filters the parameters submitted to the create and update actions
+  # to ensure only permitted attributes are allowed. This is a security measure
+  # to prevent mass assignment vulnerabilities, where a malicious user could
+  # submit extra parameters to manipulate model attributes not intended for editing.
+  #
+  # Returns:
+  # - A hash of permitted parameters for movie creation and updates, including:
+  #   - :title
+  #   - :description
+  #   - :rating
+  #   - :released_on
+  #   - :total_gross
+  #   - :director
+  #   - :duration
+  #   - :image_file_name
   def movie_params
-    # Require that the 'params' hash contains a 'movie' key.
-    # Permit only the specified attributes to be used for mass assignment.
-    # Any additional parameters submitted will be ignored.
     params.require(:movie)
           .permit(:title, :description, :rating, :released_on, :total_gross,
                   :director, :duration, :image_file_name)
