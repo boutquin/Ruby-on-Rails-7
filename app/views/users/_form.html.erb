@@ -1,0 +1,73 @@
+<%= form_with(model: user) do |form| %>
+  <!-- ============================================================================
+  # User Form Partial
+  # ============================================================================
+  # This partial view renders a form for creating or editing a user account.
+  # It utilizes the form_with helper to build a form that is automatically tied
+  # to the specified model (user). The form adapts based on whether the user
+  # object is a new record or an existing one.
+  # ============================================================================
+  -->
+
+  <!-- Render error messages if there are any validation issues -->
+  <%= render "shared/errors", object: user %>
+  <!-- This line includes a partial that displays validation errors for the user object.
+       It provides user-friendly feedback on form submission issues, such as missing
+       fields or invalid input. The 'object: user' passes the user instance to the
+       errors partial, which can check and display relevant error messages. -->
+
+  <!-- User Name Field -->
+  <%= form.label :name %>
+  <!-- This label is associated with the name input field. It provides context
+       for the user about what is expected in this input. -->
+
+  <%= form.text_field :name, autofocus: true %>
+  <!-- This text field allows the user to input their name. The `:name` symbol
+       specifies which attribute of the user model is being set. The `autofocus: true`
+       option ensures that this field is automatically focused when the form is loaded,
+       improving user experience by allowing immediate typing. -->
+
+  <!-- User Email Field -->
+  <%= form.label :email %>
+  <!-- The label for the email input field, guiding the user on what information
+       to provide. -->
+
+  <%= form.email_field :email %>
+  <!-- This email field allows users to enter their email address. The `email_field`
+       helper provides basic validation for email format by using the HTML5 email
+       input type, which can help prevent user input errors. -->
+
+  <!-- Password Field -->
+  <%= form.label :password %>
+  <!-- Label for the password input, informing users that this field is for their
+       password. -->
+
+  <%= form.password_field :password %>
+  <!-- This password field allows users to enter a password securely. The text
+       input is masked to protect sensitive information from being visible while
+       typing. -->
+
+  <!-- Password Confirmation Field -->
+  <%= form.label :password_confirmation, "Confirm Password" %>
+  <!-- Label for the password confirmation field, clarifying that the user must
+       re-enter their password for verification. The label text is customized to
+       "Confirm Password" for better clarity. -->
+
+  <%= form.password_field :password_confirmation %>
+  <!-- This field enables users to confirm their password by re-entering it. It
+       serves as a check against typos and ensures the user knows their chosen
+       password before submitting the form. -->
+
+  <!-- Submit Button -->
+  <% if user.new_record? %>
+    <!-- Check if the user is a new record -->
+    <%= form.submit "Create Account" %>
+    <!-- If the user is new, render a submit button with the text "Create Account".
+         This button submits the form, creating a new user in the database. -->
+  <% else %>
+    <!-- If the user is not a new record (i.e., they are editing an existing account) -->
+    <%= form.submit "Update Account" %>
+    <!-- Render a submit button with the text "Update Account" for existing users.
+         This button updates the user's information in the database. -->
+  <% end %>
+<% end %>

@@ -98,13 +98,12 @@ class MoviesController < ApplicationController
     # Delete the movie record from the database.
     @movie.destroy
 
-    # Set a flash notice to inform the user that the movie was deleted successfully.
-    flash[:notice] = "Movie deleted successfully."
-
     # Redirect to the movies index page.
     # The 'status: :see_other' sets the HTTP response status code to 303,
     # indicating that the resource has been replaced and the client should perform a GET request to the new URL.
-    redirect_to movies_url, status: :see_other
+    # Set a flash notice to inform the user that the movie was deleted successfully.
+    redirect_to movies_url, status: :see_other,
+        alert: "Account successfully deleted!"
   end
 
   # ============================================================================

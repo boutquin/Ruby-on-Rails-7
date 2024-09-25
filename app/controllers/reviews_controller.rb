@@ -63,7 +63,6 @@ class ReviewsController < ApplicationController
   # ============================================================================
   # Private Methods
   # ============================================================================
-
   # The 'private' keyword marks all subsequent methods as private.
   # Private methods are internal helper methods and cannot be accessed externally (e.g., via a URL).
   private

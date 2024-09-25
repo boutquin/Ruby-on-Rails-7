@@ -1,0 +1,39 @@
+<!-- ============================================================================
+# User Edit View
+# ============================================================================
+# This view template provides an interface for existing users to edit their 
+# account details within the application. It uses embedded Ruby (ERB) to 
+# dynamically generate HTML content based on the data passed from the 
+# UsersController.
+#
+# The template assumes that the @user instance variable is an instance of the 
+# User model that has been populated in the edit action of the UsersController.
+# This user object contains the current values of the user's attributes,
+# allowing the form to be pre-filled with the existing data.
+# ============================================================================
+-->
+
+<h1>Edit Account</h1>
+<!-- This H1 heading serves as the primary title for the page, clearly indicating 
+     to the user that they are in the account editing section. It provides 
+     immediate context about the purpose of the form they are about to 
+     interact with, helping to orient the user within the application. -->
+
+<%= render "form", user: @user %>
+<!-- This line renders a partial template called "form" that contains the 
+     necessary input fields for the user to edit their account information.
+     The user variable is passed to the form partial, which allows it to
+     represent the specific user being edited.
+     
+     The "form" partial is expected to handle the creation of the form elements,
+     including fields for the user's name, email, password, and password 
+     confirmation. By using the existing user data in the @user instance variable,
+     the form fields will be pre-filled with the current values, providing 
+     a user-friendly experience.
+     
+     Utilizing a partial for the form promotes code reuse and keeps the code 
+     organized. It allows the same form structure to be used for both user 
+     registration (in the new view) and account editing (in this edit view),
+     maintaining consistency across the application while minimizing 
+     duplication of code. The partial can also manage validation errors and 
+     form submission handling, ensuring a smooth user experience. -->
