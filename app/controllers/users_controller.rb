@@ -12,10 +12,10 @@ class UsersController < ApplicationController
 
   # Require users to be signed in for all actions except 'new' (registration)
   # and 'create' (user account creation).
-  # before_action :require_signin, except: [ :new, :create ]
+  before_action :require_signin, except: [ :new, :create ]
 
   # Ensure the current user is the correct user for actions that modify user data.
-  # before_action :require_correct_user, only: [ :edit, :update, :destroy ]
+  before_action :require_correct_user, only: [ :edit, :update, :destroy ]
 
   # ============================================================================
   # Index Action
@@ -85,7 +85,6 @@ class UsersController < ApplicationController
   # The instance variable @user is already set by the require_correct_user
   # method, ensuring that the correct user is being edited.
   def edit
-    @user = User.find_by id: params[:id]
   end
 
   # ============================================================================

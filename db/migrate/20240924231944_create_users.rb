@@ -13,7 +13,7 @@ class CreateUsers < ActiveRecord::Migration[7.2]
       # We define this column explicitly as a string type because we will be using UUIDs,
       # which are typically represented as strings in the database.
       # The 'null: false' option enforces that every user must have an ID, preventing the insertion of records without one.
-      t.string :id, null: false
+      t.string :id, null: false, primary_key: true
 
       # String column to store the user's name.
       # This field is used to hold the full name of the user and can be displayed in the application.
@@ -40,6 +40,9 @@ class CreateUsers < ActiveRecord::Migration[7.2]
     # which is crucial when using UUIDs to maintain the integrity of user identification in the database.
     add_index :users, :id, unique: true
   end
+
   def down
+    # Define how to reverse the migration by dropping the users table.
+    drop_table :users
   end
 end

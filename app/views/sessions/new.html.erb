@@ -1,0 +1,97 @@
+<!--
+  This view template is responsible for rendering the sign-in form, allowing
+  users to log into their accounts. It utilizes embedded Ruby (ERB) to 
+  dynamically generate the HTML content based on the data and the form
+  submission setup.
+
+  The template assumes that the sign-in process is handled by the SessionsController,
+  specifically the 'create' action, which is invoked when the form is submitted.
+
+  The form is designed for user authentication and includes fields for entering
+  the user's email and password. Appropriate labels and input types are used to 
+  enhance accessibility and usability.
+
+  The 'form_with' helper is used to create the form, which automatically generates 
+  the necessary HTML attributes, including the action URL pointing to the session 
+  creation path, and handles CSRF protection for security.
+
+  The email and password fields have labels associated with them for better
+  user experience, and the email field is set to autofocus, so it will be ready for
+  input as soon as the page loads.
+-->
+
+<h1>Sign In</h1>
+<!-- 
+  This heading (h1) displays "Sign In" to inform the user about the purpose
+  of the page. It serves as the main title of the view, clearly indicating
+  that this is the sign-in area for existing users.
+-->
+
+<p>
+  No account yet? <%= link_to "Sign up!", signup_path %>
+</p>
+<!-- 
+  This paragraph provides a friendly prompt for users who do not have an
+  account yet, encouraging them to create one. 
+  - The 'link_to' helper generates a clickable link labeled "Sign up!" 
+    which directs users to the sign-up page, specified by the 'signup_path'.
+  - This is an important feature to improve user onboarding and enhance 
+    overall user experience by making it easy for new users to navigate
+    to the registration process.
+-->
+
+<%= form_with(url: session_path) do |form| %>
+<!-- 
+  The 'form_with' helper is used to create a form for signing in.
+  - 'url: session_path' specifies that the form will be submitted to the 
+    session creation route, which maps to the SessionsController's 'create' action.
+  - This method automatically sets the form's method to POST, which is appropriate
+    for creating new sessions, ensuring that user data is sent securely.
+  - The form includes built-in CSRF protection to prevent cross-site request
+    forgery attacks, enhancing the security of the authentication process.
+-->
+
+  <%= form.label :email %>
+  <!-- 
+    This line generates a label for the email input field.
+    - The label is associated with the email field, improving accessibility by 
+      allowing screen readers to identify the purpose of the input.
+    - The text of the label will be displayed adjacent to the email input field.
+  -->
+
+  <%= form.email_field :email, autofocus: true, required: true %>
+  <!-- 
+    This line creates an input field for the user's email address.
+    - The 'email_field' helper generates an <input> element of type "email",
+      which enables browser-level validation for email formats.
+    - 'autofocus: true' sets the focus to this input field when the page loads,
+      enhancing user experience by allowing users to start typing immediately.
+    - 'required: true' ensures that the user cannot submit the form without
+      providing an email address, enforcing input validation at the browser level.
+  -->
+
+  <%= form.label :password %>
+  <!-- 
+    This line generates a label for the password input field.
+    - Similar to the email label, it enhances accessibility and provides 
+      context for the password input field.
+  -->
+
+  <%= form.password_field :password, required: true %>
+  <!-- 
+    This line creates an input field for the user's password.
+    - The 'password_field' helper generates an <input> element of type "password",
+      ensuring that the entered password is masked (i.e., not displayed in plain text).
+    - This is crucial for user privacy and security during the authentication process.
+    - 'required: true' ensures that the user cannot submit the form without
+      entering a password, further enforcing input validation.
+  -->
+
+  <%= form.submit "Sign In" %>
+  <!-- 
+    This line generates a submit button for the form.
+    - The button is labeled "Sign In", providing a clear call to action for the user.
+    - When clicked, it submits the form data (email and password) to the
+      specified action (session creation) for processing.
+  -->
+<% end %>
