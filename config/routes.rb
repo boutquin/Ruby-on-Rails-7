@@ -124,6 +124,37 @@ Rails.application.routes.draw do
   end
 
   # ============================================================================
+  # Resources for Users
+  # ============================================================================
+  # The 'resources' method generates RESTful routes for the 'users' resource.
+  # This allows for standard actions related to user management, such as creating,
+  # reading, updating, and deleting user records.
+  #
+  # Generated Routes for Users:
+  # - GET    /users          => users#index   (list all users)
+  # - GET    /users/new      => users#new     (form for creating a new user)
+  # - POST   /users          => users#create  (create a new user)
+  # - GET    /users/:id      => users#show    (show a specific user)
+  # - GET    /users/:id/edit => users#edit    (form to edit a user)
+  # - PATCH  /users/:id      => users#update  (update a specific user)
+  # - PUT    /users/:id      => users#update  (alternative to PATCH)
+  # - DELETE /users/:id      => users#destroy (delete a specific user)
+  #
+  # Notes:
+  # - The generated routes follow RESTful conventions, providing a clear and
+  #   organized way to manage user data.
+  # - Each route corresponds to a specific controller action in the UsersController,
+  #   allowing for a separation of concerns and adherence to the MVC architecture.
+  # - Named route helpers are generated for each route, enabling easier reference
+  #   in views and controllers. For example:
+  #   - users_path: path to the index of users.
+  #   - new_user_path: path to the form for creating a new user.
+  #   - user_path(@user): path to show a specific user.
+  #   - edit_user_path(@user): path to the form for editing a specific user.
+  #   - The use of the :id parameter in routes facilitates access to specific user records.
+  resources :users
+
+  # ============================================================================
   # Additional Routes (If Any)
   # ============================================================================
   # If you have other resources or custom routes, they can be defined here.
