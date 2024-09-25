@@ -9,7 +9,8 @@ class SessionsController < ApplicationController
   # since the form will initialize a new session for the user.
   #
   # Returns:
-  # - A view that allows the user to input their email and password for authentication.
+  # - A view that allows the user to input their email/username and password for
+  # authentication.
   def new
   end
 
@@ -17,18 +18,20 @@ class SessionsController < ApplicationController
   # Create Action
   # ============================================================================
   # This action handles the sign-in process. It attempts to find a user by their
-  # email and checks if the provided password is correct. If successful, the user's
-  # ID is stored in the session, and the user is redirected to their intended page.
+  # email or username and checks if the provided password is correct. If successful,
+  # the user's ID is stored in the session, and the user is redirected to their
+  # intended page.
   #
-  # If the authentication fails (invalid email or password), an error message is
-  # displayed, and the sign-in form is re-rendered.
+  # If the authentication fails (invalid email/username or password), an error
+  # message is displayed, and the sign-in form is re-rendered.
   #
   # Returns:
   # - Redirects to the user's intended URL or profile upon successful sign-in.
   # - Renders the 'new' template with an error message if authentication fails.
   def create
-    # Attempt to find the user by the email provided in the form.
-    user = User.find_by(email: params[:email])
+    # Attempt to find the user by the email or username provided in the form.
+    user = User.find_by(email: params[:email_or_username]) ||
+      User.find_by(username: params[:email_or_username])
 
     # Check if the user exists and if the password is valid.
     if user && user.authenticate(params[:password])
@@ -43,7 +46,7 @@ class SessionsController < ApplicationController
       session[:intended_url] = nil
     else
       # If authentication fails, set a flash alert message to inform the user.
-      flash.now[:alert] = "Invalid email/password combination!"
+      flash.now[:alert] = "Invalid (email or username)/password combination!"
 
       # Re-render the sign-in form with an unprocessable entity status to show errors.
       render :new, status: :unprocessable_entity

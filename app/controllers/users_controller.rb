@@ -15,7 +15,10 @@ class UsersController < ApplicationController
   before_action :require_signin, except: [ :new, :create ]
 
   # Ensure the current user is the correct user for actions that modify user data.
-  before_action :require_correct_user, only: [ :edit, :update, :destroy ]
+  before_action :require_correct_user, only: [ :edit, :update ]
+
+  # Ensure the current user is an admin for actions that delete user data.
+  before_action :require_admin, only: [ :destroy ]
 
   # ============================================================================
   # Index Action
@@ -41,7 +44,7 @@ class UsersController < ApplicationController
   # Returns:
   # - @user: An instance of User representing the user with the specified ID.
   def show
-    @user = User.find_by id: params[:id]
+    @user = User.find(params[:id])
   end
 
   # ============================================================================
@@ -111,6 +114,14 @@ class UsersController < ApplicationController
   # is removed from the session, logging them out. The user is then redirected
   # to the movies index page with a success alert.
   def destroy
+    @user = User.find(params[:id])
+    if current_user?(@user)
+      # Prevent the current user from deleting their own account.
+      redirect_to movies_url, status: :see_other,
+        alert: "Cannot delete your own account!"
+      return
+    end
+
     @user.destroy
 
     # Clear the user ID from the session.
@@ -139,7 +150,7 @@ class UsersController < ApplicationController
   # Raises:
   # - ActiveRecord::RecordNotFound if no user is found with the given ID.
   def require_correct_user
-    @user = User.find_by id: params[:id]
+    @user = User.find(params[:id])
     # Redirect to root if the current user does not match the user being edited or deleted.
     redirect_to root_url, status: :see_other unless current_user?(@user)
   end
@@ -154,11 +165,12 @@ class UsersController < ApplicationController
   # Returns:
   # - A hash of permitted parameters for user creation and updates, including:
   #   - :name
+  #   - :username
   #   - :email
   #   - :password
   #   - :password_confirmation
   def user_params
-    params.require(:user).
-      permit(:name, :email, :password, :password_confirmation)
+    params.require(:user)
+          .permit(:name, :username, :email, :password, :password_confirmation)
   end
 end
