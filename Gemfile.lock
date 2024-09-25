@@ -77,6 +77,7 @@ GEM
     autoprefixer-rails (10.4.19.0)
       execjs (~> 2)
     base64 (0.2.0)
+    bcrypt (3.1.20)
     bigdecimal (3.1.8)
     bindex (0.8.1)
     bootsnap (1.18.4)
@@ -276,6 +277,8 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.6.0)
     useragent (0.16.10)
+    uuid7 (0.2.0)
+      zeitwerk (~> 2.4)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -295,6 +298,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bcrypt (~> 3.1.7)
   bootsnap
   bootstrap (~> 5.3, >= 5.3.3)
   brakeman
@@ -312,6 +316,7 @@ DEPENDENCIES
   stimulus-rails
   turbo-rails
   tzinfo-data
+  uuid7 (~> 0.2.0)
   web-console
 
 BUNDLED WITH
